@@ -21,11 +21,31 @@
   })();
 
   extractClass = function(s) {
-    var a, r;
-    r = new RegExp('[.][a-zA-Z0-9\-_]+');
-    a = (r.exec(s))[0];
-    return a.substring(1);
+    var c, d, i, _i, _ref;
+    c = "";
+    i = s.length - 1;
+    d = "";
+    while (i >= 0) {
+      if (s[i] === ".") {
+        i = -1;
+      } else {
+        c += s[i];
+      }
+      i--;
+    }
+    for (i = _i = _ref = c.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
+      d += c[i];
+    }
+    return d;
   };
+
+  if (typeof JSFOLDER === "undefined" || JSFOLDER === null) {
+    throw new Error("You must set JSFOLDER var");
+  }
+
+  if (typeof CROQUECLASS === "undefined" || CROQUECLASS === null) {
+    throw new Error("You must set CROQUECLASS var");
+  }
 
   require.config({
     baseUrl: JSFOLDER,
@@ -43,9 +63,15 @@
     urlArgs: "bust=" + (new Date()).getTime()
   });
 
-  define('CroqueBase', ['jquery', 'dependencies'], function(dependencies) {
+  define('CroqueBase', ['jquery', 'dependencies'], function() {
     return require([CROQUECLASS], function() {
-      return eval("new " + (extractClass(CROQUECLASS)) + "()");
+      var e;
+      try {
+        return eval("new " + (extractClass(CROQUECLASS)) + "()");
+      } catch (_error) {
+        e = _error;
+        return console.log("You have tried to use a non existing class : " + e.message);
+      }
     });
   });
 

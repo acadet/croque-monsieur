@@ -1,5 +1,5 @@
 # Avoid console errors in browsers that lack a console.
-( ->
+( () ->
     noop = -> 
     methods = [
         'assert'
@@ -34,9 +34,24 @@
 )()
 
 extractClass = (s) ->
-    r = new RegExp '[.][a-zA-Z0-9\-_]+'
-    a = (r.exec s)[0]
-    a.substring 1
+    c = ""
+    i = s.length - 1
+    d = ""
+
+    while i >= 0
+        if s[i] is "." then i = -1
+        else c += s[i]
+        i--
+
+    for i in [c.length - 1..0]
+        d += c[i]
+    d
+
+if not JSFOLDER? 
+    throw new Error "You must set JSFOLDER var"
+
+if not CROQUECLASS?
+    throw new Error "You must set CROQUECLASS var"
 
 require.config(
     baseUrl: JSFOLDER
@@ -52,17 +67,22 @@ require.config(
     urlArgs: "bust=" + (new Date()).getTime()
 )
 
+#TODO
+#Test eval and CROQUECLASS
 define(
     'CroqueBase'
     [
         'jquery'
         'dependencies'
     ]
-    (dependencies) =>
+    () =>
         require( 
             [CROQUECLASS]
             () =>
-                eval "new " + (extractClass CROQUECLASS) + "()"
+                try 
+                    eval "new " + (extractClass CROQUECLASS) + "()"
+                catch e
+                    console.log "You have tried to use a non existing class : " + e.message
         )
 )
 
