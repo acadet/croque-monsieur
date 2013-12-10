@@ -67,6 +67,10 @@ require.config(
     urlArgs: "bust=" + (new Date()).getTime()
 )
 
+define 'system.Environment', ['system/Environment']
+
+define 'system.Cookie', ['jqueryCookie', 'system/Cookie']
+
 define(
     'CroqueBase'
     [

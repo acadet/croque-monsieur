@@ -63,6 +63,10 @@
     urlArgs: "bust=" + (new Date()).getTime()
   });
 
+  define('system.Environment', ['system/Environment']);
+
+  define('system.Cookie', ['jqueryCookie', 'system/Cookie']);
+
   define('CroqueBase', ['jquery', 'modernizr', 'dependencies'], function() {
     return require([CROQUECLASS], function() {
       var e;
