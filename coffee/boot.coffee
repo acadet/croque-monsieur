@@ -1,6 +1,6 @@
 # Avoid console errors in browsers that lack a console.
-( () ->
-    noop = -> 
+( () =>
+    noop = => 
     methods = [
         'assert'
         'clear'
@@ -34,18 +34,18 @@
 )()
 
 extractClass = (s) ->
-    c = ""
+    tmp = ""
     i = s.length - 1
-    d = ""
+    c = ""
 
     while i >= 0
         if s[i] is "." then i = -1
-        else c += s[i]
+        else tmp += s[i]
         i--
 
-    for i in [c.length - 1..0]
-        d += c[i]
-    d
+    for i in [tmp.length - 1..0]
+        c += tmp[i]
+    c
 
 if not JSFOLDER? 
     throw new Error "You must set JSFOLDER var"
@@ -59,7 +59,7 @@ require.config(
         jquery: 'vendor/jquery.1.10.2'
         jqueryCookie: 'vendor/jquery-cookie.1.4.0'
         modernizr: 'vendor/modernizr.2.7.1'
-        dependencies: 'dependencies'
+        dependencies: 'deps'
     shim: 
         jquery: 
             exports: '$'
@@ -67,12 +67,11 @@ require.config(
     urlArgs: "bust=" + (new Date()).getTime()
 )
 
-#TODO
-#Test eval and CROQUECLASS
 define(
     'CroqueBase'
     [
         'jquery'
+        'modernizr'
         'dependencies'
     ]
     () =>

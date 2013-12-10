@@ -21,22 +21,22 @@
   })();
 
   extractClass = function(s) {
-    var c, d, i, _i, _ref;
-    c = "";
+    var c, i, tmp, _i, _ref;
+    tmp = "";
     i = s.length - 1;
-    d = "";
+    c = "";
     while (i >= 0) {
       if (s[i] === ".") {
         i = -1;
       } else {
-        c += s[i];
+        tmp += s[i];
       }
       i--;
     }
-    for (i = _i = _ref = c.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
-      d += c[i];
+    for (i = _i = _ref = tmp.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
+      c += tmp[i];
     }
-    return d;
+    return c;
   };
 
   if (typeof JSFOLDER === "undefined" || JSFOLDER === null) {
@@ -53,7 +53,7 @@
       jquery: 'vendor/jquery.1.10.2',
       jqueryCookie: 'vendor/jquery-cookie.1.4.0',
       modernizr: 'vendor/modernizr.2.7.1',
-      dependencies: 'dependencies'
+      dependencies: 'deps'
     },
     shim: {
       jquery: {
@@ -63,7 +63,7 @@
     urlArgs: "bust=" + (new Date()).getTime()
   });
 
-  define('CroqueBase', ['jquery', 'dependencies'], function() {
+  define('CroqueBase', ['jquery', 'modernizr', 'dependencies'], function() {
     return require([CROQUECLASS], function() {
       var e;
       try {
