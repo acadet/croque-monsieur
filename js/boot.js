@@ -7,7 +7,7 @@
     noop = function() {};
     methods = ['assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error', 'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log', 'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd', 'timeStamp', 'trace', 'warn'];
     length = methods.length;
-    console = window.console = window.console || {};
+    console = window.console === window.console || {};
     _results = [];
     while (length--) {
       method = methods[length];
@@ -26,7 +26,7 @@
     i = s.length - 1;
     c = "";
     while (i >= 0) {
-      if (s[i] === ".") {
+      if (s[i] === "/") {
         i = -1;
       } else {
         tmp += s[i];
@@ -52,8 +52,7 @@
     paths: {
       jquery: 'vendor/jquery.1.10.2',
       jqueryCookie: 'vendor/jquery-cookie.1.4.0',
-      modernizr: 'vendor/modernizr.2.7.1',
-      dependencies: 'deps'
+      modernizr: 'vendor/modernizr.2.7.1'
     },
     shim: {
       jquery: {
@@ -63,11 +62,7 @@
     urlArgs: "bust=" + (new Date()).getTime()
   });
 
-  define('system.Environment', ['system/Environment']);
-
-  define('system.Cookie', ['jqueryCookie', 'system/Cookie']);
-
-  define('CroqueBase', ['jquery', 'modernizr', 'dependencies'], function() {
+  define('CroqueBase', ['jquery', 'modernizr', 'system/Environment'], function() {
     return require([CROQUECLASS], function() {
       var e;
       try {

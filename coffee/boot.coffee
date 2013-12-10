@@ -26,7 +26,7 @@
         'warn'
     ]
     length = methods.length
-    console = window.console = window.console or {}
+    console = window.console is window.console or {}
 
     while length--
         method = methods[length]
@@ -39,7 +39,7 @@ extractClass = (s) ->
     c = ""
 
     while i >= 0
-        if s[i] is "." then i = -1
+        if s[i] is "/" then i = -1
         else tmp += s[i]
         i--
 
@@ -59,7 +59,6 @@ require.config(
         jquery: 'vendor/jquery.1.10.2'
         jqueryCookie: 'vendor/jquery-cookie.1.4.0'
         modernizr: 'vendor/modernizr.2.7.1'
-        dependencies: 'deps'
     shim: 
         jquery: 
             exports: '$'
@@ -67,16 +66,12 @@ require.config(
     urlArgs: "bust=" + (new Date()).getTime()
 )
 
-define 'system.Environment', ['system/Environment']
-
-define 'system.Cookie', ['jqueryCookie', 'system/Cookie']
-
 define(
     'CroqueBase'
     [
         'jquery'
         'modernizr'
-        'dependencies'
+        'system/Environment'
     ]
     () =>
         require( 
