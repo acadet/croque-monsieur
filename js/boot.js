@@ -1,5 +1,5 @@
 (function() {
-  var Croque, Dep, Stack, StackElement;
+  var Croque, Module, Stack, StackElement;
 
   StackElement = (function() {
     function StackElement(content) {
@@ -27,38 +27,29 @@
 
   })();
 
-  Dep = (function() {
-    function Dep(name, deps, declaration) {
+  Module = (function() {
+    function Module(name, declaration) {
       this.name = name;
-      this.deps = deps;
       this.declaration = declaration;
     }
 
-    Dep.prototype.getName = function() {
+    Module.prototype.getName = function() {
       return this.name;
     };
 
-    Dep.prototype.setName = function(n) {
+    Module.prototype.setName = function(n) {
       return this.name = n;
     };
 
-    Dep.prototype.getDeps = function() {
-      return this.deps;
-    };
-
-    Dep.prototype.setDeps = function(d) {
-      return this.deps = d;
-    };
-
-    Dep.prototype.getDeclaration = function() {
+    Module.prototype.getDeclaration = function() {
       return this.declaration;
     };
 
-    Dep.prototype.setDeclaration = function(f) {
+    Module.prototype.setDeclaration = function(f) {
       return this.declaration = f;
     };
 
-    return Dep;
+    return Module;
 
   })();
 
@@ -109,8 +100,7 @@
         paths: {
           jquery: 'vendor/jquery.1.10.2',
           jqueryCookie: 'vendor/jquery-cookie.1.4.0',
-          modernizr: 'vendor/modernizr.2.7.1',
-          domReady: 'vendor/domReady'
+          modernizr: 'vendor/modernizr.2.7.1'
         },
         shim: {
           jquery: {
@@ -119,19 +109,20 @@
         },
         urlArgs: "bust=" + (new Date()).getTime()
       });
-      require(['jquery', 'domReady', 'modernizr', 'system/Environment'], function(domReady) {
+      require(['jquery', 'modernizr', 'system/Environment'], function(domReady) {
         return require([_this.classPath], function() {
           return _this.whenReady(function() {
-            var e, o;
+            var e, m;
             while (!_this.stack.isEmpty()) {
-              o = _this.stack.pop().getContent();
-              window[o.name] = o.declaration();
+              m = _this.stack.pop().getContent();
+              window[m.getName()] = (m.getDeclaration())();
             }
             try {
               return eval("new " + _this.className + "()");
             } catch (_error) {
               e = _error;
-              return console.log("CroqueMonsieur: error when constructing main class: " + e.message);
+              console.log("CroqueMonsieur: error when constructing main class: " + e.message);
+              return console.log(e.stack);
             }
           });
         });
@@ -188,14 +179,10 @@
       this.total++;
       define(name, deps);
       return require([name], function() {
-        var o, s;
+        var s;
         _this.loaded++;
         s = _this.extractClass(name);
-        o = {
-          name: s,
-          declaration: declaration
-        };
-        return _this.stack.push(new StackElement(o));
+        return _this.stack.push(new StackElement(new Module(s, declaration)));
       });
     };
 
@@ -209,19 +196,6 @@
         }, 250);
       }
     };
-
-    /*
-    monsieur: (name, deps, declaration) ->
-        define name, deps, declaration
-        for i in deps
-            require [i]
-        require [name], (e) =>
-            s = @extractClass name
-            window[s] = e
-            if s is @className
-                a = eval "new " + @className + "()"
-    */
-
 
     return Croque;
 

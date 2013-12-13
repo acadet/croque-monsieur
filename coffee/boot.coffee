@@ -15,10 +15,9 @@ class StackElement
     setPrev: (prev) ->
         @prev = prev
 
-class Dep
-    constructor: (name, deps, declaration) ->
+class Module
+    constructor: (name, declaration) ->
         @name = name
-        @deps = deps
         @declaration = declaration
 
     getName: () ->
@@ -26,12 +25,6 @@ class Dep
 
     setName: (n) ->
         @name = n
-
-    getDeps: () ->
-        @deps
-
-    setDeps: (d) ->
-        @deps = d
 
     getDeclaration: () ->
         @declaration
@@ -78,7 +71,6 @@ class Croque
                 jquery: 'vendor/jquery.1.10.2'
                 jqueryCookie: 'vendor/jquery-cookie.1.4.0'
                 modernizr: 'vendor/modernizr.2.7.1'
-                domReady: 'vendor/domReady'
             shim: 
                 jquery: 
                     exports: '$'
@@ -89,7 +81,6 @@ class Croque
         require(
             [
                 'jquery'
-                'domReady'
                 'modernizr'
                 'system/Environment'
             ]
@@ -99,12 +90,13 @@ class Croque
                     () =>
                         @whenReady () =>
                             while not @stack.isEmpty()
-                                o = @stack.pop().getContent()
-                                window[o.name] = o.declaration()
+                                m = @stack.pop().getContent()
+                                window[m.getName()] = (m.getDeclaration())()
                             try
                                 eval "new " + @className + "()"
                             catch e
                                 console.log "CroqueMonsieur: error when constructing main class: " + e.message
+                                console.log e.stack
                 )
         )
 
@@ -167,10 +159,7 @@ class Croque
         require [name], () =>
             @loaded++
             s = @extractClass name
-            o =
-                name : s
-                declaration: declaration
-            @stack.push new StackElement(o)
+            @stack.push new StackElement(new Module s, declaration)
 
     whenReady: (f) ->
         if @loaded >= @total 
@@ -181,17 +170,6 @@ class Croque
                     @whenReady f
                 250
             )
-    ###
-    monsieur: (name, deps, declaration) ->
-        define name, deps, declaration
-        for i in deps
-            require [i]
-        require [name], (e) =>
-            s = @extractClass name
-            window[s] = e
-            if s is @className
-                a = eval "new " + @className + "()"
-    ###
 
 
 window.Croque = new Croque(JSFOLDER, CROQUECLASS)

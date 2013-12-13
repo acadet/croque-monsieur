@@ -7,11 +7,14 @@ Croque.monsieur(
 	() =>
 		class TestCookie extends UnitTest
 			constructor: () ->
-				super
-				@testSimpleConstructor()
-				$('body').append @getLog()
+				super UnitTest.outputs.HTML
+				@testSimpleConstructor()				
 
 			testSimpleConstructor: () ->
+				@startTest('testSimpleConstructor')
+
 				c = new Cookie 'a', 'b'
 				@assertThat c.getVal(), Cookie.getVal 'a'
+
+				@endTest()
 )
