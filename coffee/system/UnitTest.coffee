@@ -16,7 +16,7 @@ Croque.monsieur(
 			appendLog: (msg) ->
 				@log.push @done + '- ' + msg
 
-			assertThat: (e1, e2) ->
+			assertEquals: (e1, e2) ->
 				@done++
 				
 				if not e1?
@@ -27,7 +27,7 @@ Croque.monsieur(
 					@appendLog 'Fail: second arg does not exist'
 					return false
 
-				if e1 is e2
+				if "#{e1}" is "#{e2}"
 					@ok++
 					@appendLog 'Success: ' + e1
 					return true
@@ -38,10 +38,20 @@ Croque.monsieur(
 			assertUndefined: (e) ->
 				@done++
 				if e?
-					@appendLog 'Failed expected to be undefined: ' + e
+					@appendLog 'Fail: expected to be undefined: ' + e
 				else
 					@ok++
 					@appendLog 'Success'
+
+			assertWrong: (f) ->
+				@done++
+				try
+					f()
+					@appendLog 'Fail: expected to be wrong: ' + f
+				catch e
+					@ok++
+					@appendLog 'Success'
+				
 
 			startTest: (name) ->
 				@done = 0
@@ -49,6 +59,9 @@ Croque.monsieur(
 				@log = ['Running ' + name]
 
 			endTest: () ->
+				if @ok is 0 or @done is 0
+					Log.i "UnitTest: You should launch at least one test"
+					return null
 				stats = 'Successes: ' + @ok + ' / Total: ' + @done
 				if @output is UnitTest.outputs.CONSOLE
 					for e in @log

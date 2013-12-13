@@ -15,10 +15,10 @@ Croque.monsieur(
 				@startTest('testConstructor')
 
 				c = new Cookie 'a', 'b'
-				@assertThat c.getVal(), Cookie.getVal 'a'
+				@assertEquals c.getVal(), Cookie.getVal 'a'
 
 				d = new Cookie 'a'
-				@assertThat d.getVal(), c.getVal()
+				@assertEquals d.getVal(), c.getVal()
 
 				@endTest()
 
