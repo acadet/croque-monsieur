@@ -91,7 +91,6 @@
       this.folder = folder;
       this.classPath = c;
       this.className = this.extractClass(c);
-      this.fixedConsole = false;
       this.loaded = 0;
       this.total = 0;
       this.stack = new Stack;
@@ -110,7 +109,7 @@
         },
         urlArgs: "bust=" + (new Date()).getTime()
       });
-      require(['jquery', 'modernizr', 'system/Environment', 'system/Log'], function() {
+      require(['jquery', 'modernizr', 'system/default/Environment', 'system/default/Log'], function() {
         return require([_this.classPath], function() {
           return _this.whenReady(function() {
             var e, m;
@@ -133,24 +132,19 @@
     Croque.prototype.fixConsole = function() {
       var console, length, method, methods, noop,
         _this = this;
-      if (this.fixedConsole) {
-        return false;
-      } else {
-        this.fixedConsole = true;
-        noop = function() {
-          return {};
-        };
-        methods = ['assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error', 'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log', 'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd', 'timeStamp', 'trace', 'warn'];
-        length = methods.length;
-        console = window.console === window.console || {};
-        while (length--) {
-          method = methods[length];
-          if (!console[method]) {
-            console[method] = noop;
-          }
+      noop = function() {
+        return {};
+      };
+      methods = ['assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error', 'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log', 'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd', 'timeStamp', 'trace', 'warn'];
+      length = methods.length;
+      console = window.console === window.console || {};
+      while (length--) {
+        method = methods[length];
+        if (!console[method]) {
+          console[method] = noop;
         }
-        return true;
       }
+      return true;
     };
 
     Croque.prototype.extractClass = function(s) {

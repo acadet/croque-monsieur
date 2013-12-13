@@ -58,7 +58,6 @@ class Croque
         @folder = folder
         @classPath = c
         @className = @extractClass c
-        @fixedConsole = false
         @loaded = 0
         @total = 0
         @stack = new Stack
@@ -83,8 +82,8 @@ class Croque
             [
                 'jquery'
                 'modernizr'
-                'system/Environment'
-                'system/Log'
+                'system/default/Environment'
+                'system/default/Log'
             ]
             () =>
                 require( 
@@ -104,41 +103,38 @@ class Croque
 
     # Avoid console errors in browsers that lack a console.
     fixConsole: () ->
-        if @fixedConsole then false
-        else 
-            @fixedConsole = true
-            noop = => {}
-            methods = [
-                'assert'
-                'clear'
-                'count'
-                'debug'
-                'dir'
-                'dirxml'
-                'error'
-                'exception'
-                'group'
-                'groupCollapsed'
-                'groupEnd'
-                'info'
-                'log'
-                'markTimeline'
-                'profile'
-                'profileEnd'
-                'table'
-                'time'
-                'timeEnd'
-                'timeStamp'
-                'trace'
-                'warn'
-            ]
-            length = methods.length
-            console = window.console is window.console or {}
+        noop = => {}
+        methods = [
+            'assert'
+            'clear'
+            'count'
+            'debug'
+            'dir'
+            'dirxml'
+            'error'
+            'exception'
+            'group'
+            'groupCollapsed'
+            'groupEnd'
+            'info'
+            'log'
+            'markTimeline'
+            'profile'
+            'profileEnd'
+            'table'
+            'time'
+            'timeEnd'
+            'timeStamp'
+            'trace'
+            'warn'
+        ]
+        length = methods.length
+        console = window.console is window.console or {}
 
-            while length--
-                method = methods[length]
-                if not console[method] then console[method] = noop
-            true
+        while length--
+            method = methods[length]
+            if not console[method] then console[method] = noop
+        true
 
     extractClass: (s) ->
         if not s? then throw new Error 'extractClass needs a non empty string'
