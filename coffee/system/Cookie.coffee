@@ -1,4 +1,5 @@
-define(
+Croque.monsieur(
+	'system/Cookie'
 	[
 		'jqueryCookie'
 	]

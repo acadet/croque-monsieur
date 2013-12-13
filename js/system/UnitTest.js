@@ -1,0 +1,1 @@
+var _this=this;Croque.monsieur("system/UnitTest",[],function(){var t;return t=function(){function t(){this.done=0,this.ok=0}return t.prototype.assertThat=function(t,n){return this.done++,t===n?(this.ok++,!0):!1},t.prototype.getLog=function(){var t;return t="<p>Unit Test:</p>",t+="<p>Tests done: "+this.done+"</p>",t+="<p>Tests passed: "+this.ok+"</p>"},t}()});
