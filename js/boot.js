@@ -87,6 +87,7 @@
       if (c == null) {
         throw new Error('You must set CROQUECLASS var');
       }
+      this.start = new Date().getMilliseconds();
       this.folder = folder;
       this.classPath = c;
       this.className = this.extractClass(c);
@@ -109,7 +110,7 @@
         },
         urlArgs: "bust=" + (new Date()).getTime()
       });
-      require(['jquery', 'modernizr', 'system/Environment'], function(domReady) {
+      require(['jquery', 'modernizr', 'system/Environment', 'system/Log'], function() {
         return require([_this.classPath], function() {
           return _this.whenReady(function() {
             var e, m;
@@ -121,8 +122,8 @@
               return eval("new " + _this.className + "()");
             } catch (_error) {
               e = _error;
-              console.log("CroqueMonsieur: error when constructing main class: " + e.message);
-              return console.log(e.stack);
+              Log.w("CroqueMonsieur: error when constructing main class: " + e.message);
+              return Log.w(e.stack);
             }
           });
         });

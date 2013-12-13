@@ -17,22 +17,22 @@ Croque.monsieur(
 					@key = key
 					@value = value
 					$.cookie key, value,
-					expires: expires
-					path: path
+						expires: expires
+						path: path
 
 			@getVal: (key) ->
 				$.cookie key
 
 			getVal: () ->
-				@val
+				@value
 
 			setVal: (v) ->
 				@value = v
-				$.cookie @key, @path
+				$.cookie @key, @value
 
 			@remove: (key) ->
-				$.removeCookie key
+				$.cookie key, null
 
 			remove: () ->
-				$.remove @key
+				Cookie.remove @key
 )

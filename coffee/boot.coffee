@@ -54,6 +54,7 @@ class Croque
         if not folder? then throw new Error 'You must set JSFOLDER var'
         if not c? then throw new Error 'You must set CROQUECLASS var'
 
+        @start = new Date().getMilliseconds()
         @folder = folder
         @classPath = c
         @className = @extractClass c
@@ -83,8 +84,9 @@ class Croque
                 'jquery'
                 'modernizr'
                 'system/Environment'
+                'system/Log'
             ]
-            (domReady) =>
+            () =>
                 require( 
                     [@classPath]
                     () =>
@@ -95,8 +97,8 @@ class Croque
                             try
                                 eval "new " + @className + "()"
                             catch e
-                                console.log "CroqueMonsieur: error when constructing main class: " + e.message
-                                console.log e.stack
+                                Log.w "CroqueMonsieur: error when constructing main class: " + e.message
+                                Log.w e.stack
                 )
         )
 

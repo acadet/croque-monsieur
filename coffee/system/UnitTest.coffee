@@ -35,7 +35,17 @@ Croque.monsieur(
 					@appendLog 'Fail: expected ' + e1 + ' instead of ' + e2 
 					return false
 
+			assertUndefined: (e) ->
+				@done++
+				if e?
+					@appendLog 'Failed expected to be undefined: ' + e
+				else
+					@ok++
+					@appendLog 'Success'
+
 			startTest: (name) ->
+				@done = 0
+				@ok = 0
 				@log = ['Running ' + name]
 
 			endTest: () ->
