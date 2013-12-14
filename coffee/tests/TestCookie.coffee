@@ -1,13 +1,13 @@
-Croque.monsieur(
+miam(
 	'tests/TestCookie'
 	[
-		'system/UnitTest'
+		'system/TestUnit'
 		'system/Cookie'
 	]
 	() =>
-		class TestCookie extends UnitTest
+		class TestCookie extends TestUnit
 			constructor: () ->
-				super UnitTest.outputs.HTML
+				super TestUnit.outputs.HTML
 				@testConstructor()		
 				@testRemove()		
 
@@ -26,9 +26,9 @@ Croque.monsieur(
 				@startTest('testRemove')
 				c = new Cookie 'a', 'b'
 				c.remove()
-				@assertUndefined Cookie.getVal 'a'
+				@assert not Cookie.getVal 'a'
 				c = new Cookie 'a', 'c'
 				Cookie.remove 'a'
-				@assertUndefined Cookie.getVal 'a'
+				@assert not Cookie.getVal 'a'
 				@endTest()
 )

@@ -1,0 +1,1 @@
+var Stack;Stack=function(){function t(){this.tail=null}return t.prototype.push=function(t){return t.setPrev(this.tail),this.tail=t},t.prototype.pop=function(){var t;return this.isEmpty()?null:(t=this.tail,this.tail=this.tail.getPrev(),t)},t.prototype.isEmpty=function(){return null===this.tail},t}();

@@ -1,8 +1,8 @@
-Croque.monsieur(
-	'system/UnitTest'
+miam(
+	'system/TestUnit'
 	[]
 	() =>
-		class UnitTest
+		class TestUnit
 			@outputs = 
 				CONSOLE : 1
 				HTML : 2
@@ -27,21 +27,13 @@ Croque.monsieur(
 					@appendLog 'Fail: second arg does not exist'
 					return false
 
-				if "#{e1}" is "#{e2}"
+				if "#{e1}" is "#{e2}" or e1 is e2
 					@ok++
 					@appendLog 'Success: ' + e1
 					return true
 				else
 					@appendLog 'Fail: expected ' + e1 + ' instead of ' + e2 
 					return false
-
-			assertUndefined: (e) ->
-				@done++
-				if e?
-					@appendLog 'Fail: expected to be undefined: ' + e
-				else
-					@ok++
-					@appendLog 'Success'
 
 			assertWrong: (f) ->
 				@done++
@@ -50,28 +42,40 @@ Croque.monsieur(
 					@appendLog 'Fail: expected to be wrong: ' + f
 				catch e
 					@ok++
-					@appendLog 'Success'
-				
+					@appendLog 'Success: ' + e.message
 
+			assert: (e) ->
+				@done++
+				if e?
+					@ok++
+					@appendLog 'Success'
+				else
+					@appendLog 'Fail: expected to be true: ' + e
+				
 			startTest: (name) ->
 				@done = 0
 				@ok = 0
 				@log = ['Running ' + name]
 
 			endTest: () ->
-				if @ok is 0 or @done is 0
-					Log.i "UnitTest: You should launch at least one test"
+				if @done is 0
+					Log.i "TestUnit: You should launch at least one test"
 					return null
 				stats = 'Successes: ' + @ok + ' / Total: ' + @done
-				if @output is UnitTest.outputs.CONSOLE
+				if @output is TestUnit.outputs.CONSOLE
 					for e in @log
 						console.log e
 					console.log stats
-				else if @output is UnitTest.outputs.HTML
+				else if @output is TestUnit.outputs.HTML
 					s = '<h2>' + @log[0] + '</h2>'
 					for i in [1..@log.length - 1]
 						s += '<p>' + @log[i] + '</p>'
-					s += stats
+					s += '<p style="color : '
+					if @ok is @done
+						s += 'green'
+					else
+						s += 'red'
+					s += ';">' + stats + '</p>'
 					$('body').append s
 				else 
 					throw new Error 'You specified a bad ouput'

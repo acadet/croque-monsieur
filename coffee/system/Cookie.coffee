@@ -1,4 +1,4 @@
-Croque.monsieur(
+miam(
 	'system/Cookie'
 	[
 		'jqueryCookie'

@@ -1,13 +1,13 @@
-Croque.monsieur(
+miam(
 	'tests/TestUtils'
 	[
-		'system/UnitTest'
+		'system/TestUnit'
 		'system/Utils'
 	]
 	() =>
-		class TestUtils extends UnitTest
+		class TestUtils extends TestUnit
 			constructor: () ->
-				super UnitTest.outputs.HTML
+				super TestUnit.outputs.HTML
 
 				@testImplode()
 				@testExplode()
@@ -34,6 +34,9 @@ Croque.monsieur(
 				@assertWrong () =>
 					Utils.implode ';', []
 
+				a = ['mojito']
+				@assertEquals (Utils.implode '.', a), 'mojito'
+
 				@endTest()
 
 			testExplode: () ->
@@ -55,6 +58,9 @@ Croque.monsieur(
 
 				@assertWrong () =>
 					Utils.explode ';', ""
+
+				s = 'mojito'
+				@assertEquals (Utils.explode ';', s), ['mojito']
 
 				@endTest()
 
