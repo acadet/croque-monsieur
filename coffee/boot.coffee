@@ -19,8 +19,7 @@ require(
                 @loaded = 0
                 @total = 0
                 @stack = new Stack
-
-
+                
                 @fixConsole()
 
                 require.config(
