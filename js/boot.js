@@ -1,3 +1,10 @@
+/*
+ # @file boot.coffee
+ # @author Adrien Cadet <acadet@live.fr>
+ # @brief Wraps initialization of Croque Monsieur
+*/
+
+
 (function() {
   var _this = this;
 
@@ -11,11 +18,15 @@
   })();
 
   require([JSFOLDER + 'system/default/Module', JSFOLDER + 'system/default/StackElement', JSFOLDER + 'system/default/Stack'], function() {
+    /*
+     # @class Croque
+     # @brief Loads needed class and all its dependencies. Set default config
+    */
+
     var Croque;
     Croque = (function() {
       function Croque(folder, c) {
         var _this = this;
-        this.start = new Date().getMilliseconds();
         this.folder = folder;
         this.classPath = c;
         this.className = this.extractClass(c);
@@ -57,6 +68,12 @@
         });
       }
 
+      /*
+       # Avoid console errors in browsers that lack a console.
+       # Replace each function by an empty one
+      */
+
+
       Croque.prototype.fixConsole = function() {
         var console, length, method, methods, noop,
           _this = this;
@@ -74,6 +91,11 @@
         }
         return true;
       };
+
+      /*
+       # Extract class from given path
+      */
+
 
       Croque.prototype.extractClass = function(s) {
         var c, i, tmp, _i, _ref;
@@ -97,8 +119,25 @@
         return c;
       };
 
+      /*
+       # VI Function. Used to define each module of the app
+       # @param name{String} Name of module
+       # @param deps{Array} Array of dependencies' name
+       # @param declaration{Function} Declaration of class
+      */
+
+
       Croque.prototype.miam = function(name, deps, declaration) {
         var _this = this;
+        if (name == null) {
+          throw new Error('Your module needs a name');
+        }
+        if (deps == null) {
+          throw new Error('Your module needs at least an empty array of dependencies');
+        }
+        if (declaration == null) {
+          throw new Error('Your module needs a declaration');
+        }
         this.total++;
         define(name, deps);
         return require([name], function() {
@@ -108,6 +147,12 @@
           return _this.stack.push(new StackElement(new Module(s, declaration)));
         });
       };
+
+      /*
+       # Execute a function when init is done
+       # (deps are all loaded)
+      */
+
 
       Croque.prototype.whenReady = function(f) {
         var _this = this;
