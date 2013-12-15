@@ -16,15 +16,12 @@ miam(
 
 			setType: (type) ->
 				@type = type
-				this
 
 			setData: (data) ->
 				@data = data
-				this
 
 			setDataType: (type) ->
 				@dataType = type
-				this
 
 			setSuccess: (f) ->
 				@success = f
