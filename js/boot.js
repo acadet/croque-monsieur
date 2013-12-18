@@ -45,6 +45,9 @@
           shim: {
             jquery: {
               exports: '$'
+            },
+            quoJS: {
+              exports: '$$'
             }
           },
           urlArgs: "bust=" + (new Date()).getTime()

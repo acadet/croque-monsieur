@@ -2,65 +2,106 @@ miam(
 	'system/TestUnit'
 	[]
 	() =>
+		###
+		 # @class TestUnit
+		 # @brief Make tests easier. Wrap multiple functions such as assert, log...
+		 # @description To use this class, create your one inheriting from this one.
+		 # Then start each of your test by startTest() and end it by endTest() to get
+		 # a trace of what you have run
+		 ###
 		class TestUnit
+			###
+			 # Static attribute. Developer can choose output
+			 ###
 			@outputs = 
 				CONSOLE : 1
 				HTML : 2
 
+			###
+			 # Init a new test unit. User can choose an ouput
+			 ###
 			constructor: (output) ->
 				@done = 0
 				@ok = 0
 				@log = []
-				@output = output
+				if output?
+					@output = output
+				else @output = TestUnit.outputs.CONSOLE
 
-			appendLog: (msg) ->
+			###
+			 # Append message to current log
+			 # @param msg{String}
+			 ###
+			appendToLog: (msg) ->
 				@log.push @done + '- ' + msg
 
+			###
+			 # Assert that given elements are equals
+			 # Answer is added to log
+			 # @param e1{Object}
+			 # @param e2{Object}
+			 ###
 			assertEquals: (e1, e2) ->
 				@done++
 				
 				if not e1?
-					@appendLog 'Fail: first arg does not exist'
+					@appendToLog 'Fail: first arg does not exist'
 					return false
 
 				if not e2?
-					@appendLog 'Fail: second arg does not exist'
+					@appendToLog 'Fail: second arg does not exist'
 					return false
 
 				if "#{e1}" is "#{e2}" or e1 is e2
 					@ok++
-					@appendLog 'Success: ' + e1
+					@appendToLog 'Success: ' + e1
 					return true
 				else
-					@appendLog 'Fail: expected ' + e1 + ' instead of ' + e2 
+					@appendToLog 'Fail: expected ' + e1 + ' instead of ' + e2 
 					return false
 
+			###
+			 # Assert that function will throw an en error
+			 # @param f{Function}
+			 ###
 			assertWrong: (f) ->
 				@done++
 				try
 					f()
-					@appendLog 'Fail: expected to be wrong: ' + f
+					@appendToLog 'Fail: expected to be wrong: ' + f
 				catch e
 					@ok++
-					@appendLog 'Success: ' + e.message
+					@appendToLog 'Success: ' + e.message
 
+			###
+			 # Assert element is true
+			 # @param e{Object}
+			 ###
 			assert: (e) ->
 				@done++
 				if e?
 					@ok++
-					@appendLog 'Success'
+					@appendToLog 'Success'
 				else
-					@appendLog 'Fail: expected to be true: ' + e
+					@appendToLog 'Fail: expected to be true: ' + e
 				
+			###
+			 # Start test. Create a new log and reset counters
+			 # @param name{String} Name of test
+			 ###
 			startTest: (name) ->
 				@done = 0
 				@ok = 0
 				@log = ['Running ' + name]
 
+			###
+			 # End testing. Display result in selected output
+			 ###
 			endTest: () ->
 				if @done is 0
 					Log.i "TestUnit: You should launch at least one test"
-					return null
+					return
+				
 				stats = 'Successes: ' + @ok + ' / Total: ' + @done
 				if @output is TestUnit.outputs.CONSOLE
 					for e in @log

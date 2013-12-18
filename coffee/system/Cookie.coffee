@@ -13,9 +13,9 @@ miam(
 			 # Constructor
 			 # If only key is given, get current value of cookie
 			 # @param key{String} Required param corresponding to cookie's key
-			 # @param value{String} Optional. Cookie's value
-			 # @param expires{Integer} Optional. Number of day before expiring
-			 # @param path{String} Optional. Path for cookie
+			 # @param value{String} Optional Cookie's value
+			 # @param expires{Integer} Optional Number of day before expiring
+			 # @param path{String} Optional Path for cookie
 			 ###
 			constructor: (key, value, expires, path) ->
 				if not key? then throw new Error "Cookie must have at least a key"

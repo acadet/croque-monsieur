@@ -44,6 +44,8 @@ require(
                     shim: 
                         jquery: 
                             exports: '$'
+                        quoJS:
+                            exports: '$$'
                     # Uncomment line below for avoiding cache troubles when developing
                     urlArgs: "bust=" + (new Date()).getTime()
                 )
