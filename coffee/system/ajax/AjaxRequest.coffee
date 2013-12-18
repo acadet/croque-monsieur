@@ -1,5 +1,5 @@
 miam(
-	'ajax/AjaxRequest'
+	'system/ajax/AjaxRequest'
 	[]
 	() =>
 		class AjaxRequest

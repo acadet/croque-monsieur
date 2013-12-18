@@ -6,20 +6,19 @@ miam(
 	() =>
 		class Tag
 			constructor: (tag) ->
-				if tag?
-					a = Utils.explode '.', tag
-					@tag = $('<' + a[0] + '></' + a[0] + '>')
-					
-					for i in [1..a.length - 1]
-						@addClass a[i]
-				else
-					@tag = null
+				a = Utils.explode '.', tag
+				pre = Utils.explode '#', a[0]
+
+				@tag = $('<' + pre[0] + '></' + pre[0] + '>')
+
+				if pre.length > 1
+					@setId pre[1]
+				
+				for i in [1..a.length - 1]
+					@addClass a[i]
 
 			addClass: (c) ->
 				@tag.addClass c
-
-			removeClass: (c) ->
-				@tag.removeClass c
 
 			setId: (id) ->
 				@tag.attr 'id', id
@@ -50,12 +49,6 @@ miam(
 			centerize: ($wrapper) ->
 				@horizontal $wrapper
 				@vertical $wrapper
-
-			find: (criterion) ->
-				@tag = $(document).find(criterion)
-
-			remove: () ->
-				$(document).find(@tag).remove()
 
 			toJQuery: () ->
 				@tag

@@ -9,9 +9,7 @@ miam(
 			constructor: () ->
 				super TestUnit.outputs.HTML
 				@testAppend()
-				@testRemove()
 				@testConstructor()
-				@testFind()
 				@testClasses()
 				@testId()
 				@testContent()
@@ -32,28 +30,12 @@ miam(
 
 				@endTest()
 
-			testRemove: () ->
-				@startTest 'testRemove'
-				t = new Tag('div')
-
-				t.appendTo()
-				t.remove()
-				@assert not $('body').find('div')
-
-				@endTest()
-
 			testConstructor: () ->
 				@startTest 'testConstructor'
-				t = new Tag('div.martini.bijou')
+				t = new Tag('div#gin.martini.bijou')
 				@assert t.toJQuery().hasClass('martini')
 				@assert t.toJQuery().hasClass('bijou')
-
-				@endTest()
-
-			testFind: () ->
-				@startTest 'testFind'
-				t = new Tag()
-				@assert t.find('body').html()
+				@assertEquals t.toJQuery().attr('id'), 'gin'
 
 				@endTest()
 
@@ -65,10 +47,6 @@ miam(
 
 				@assert t.toJQuery().hasClass('chruchill')
 				@assert t.toJQuery().hasClass('farnell')
-
-				t.removeClass 'farnell'
-
-				@assert not t.toJQuery().hasClass 'farnell'
 				@endTest()
 
 			testId: () ->
