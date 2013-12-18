@@ -39,7 +39,8 @@
           paths: {
             jquery: 'vendor/jquery.1.10.2',
             jqueryCookie: 'vendor/jquery-cookie.1.4.0',
-            modernizr: 'vendor/modernizr.2.7.1'
+            modernizr: 'vendor/modernizr.2.7.1',
+            jqueryUI: 'vendor/jquery-ui.1.10.3'
           },
           shim: {
             jquery: {
@@ -48,6 +49,11 @@
           },
           urlArgs: "bust=" + (new Date()).getTime()
         });
+        if (navigator.userAgent.match(/MSIE (\d+\.\d+);/)) {
+          define('quoJS', []);
+        } else {
+          define('quoJS', ['vendor/quo.2.3.6']);
+        }
         require(['jquery', 'modernizr', 'system/default/Environment', 'system/default/Log'], function() {
           return require([_this.classPath], function() {
             return _this.whenReady(function() {

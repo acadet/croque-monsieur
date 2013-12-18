@@ -40,12 +40,20 @@ require(
                         jquery: 'vendor/jquery.1.10.2'
                         jqueryCookie: 'vendor/jquery-cookie.1.4.0'
                         modernizr: 'vendor/modernizr.2.7.1'
+                        jqueryUI: 'vendor/jquery-ui.1.10.3'
                     shim: 
                         jquery: 
                             exports: '$'
                     # Uncomment line below for avoiding cache troubles when developing
                     urlArgs: "bust=" + (new Date()).getTime()
                 )
+
+                # QuoJS is incompatible with IE
+                # Load it only if it's not this guy
+                if navigator.userAgent.match(/MSIE (\d+\.\d+);/)
+                    define 'quoJS', []
+                else
+                    define 'quoJS', ['vendor/quo.2.3.6']
 
                 # Launch main class' requirement
                 require(

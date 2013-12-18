@@ -2,8 +2,18 @@ miam(
 	'system/Utils'
 	[]
 	() =>
+		###
+		 # @class Utils
+		 # @brief Wraps global useful methods
+		 ###
 		class Utils
 
+			###
+			 # Join pieces of an array using glue
+			 # @param glue{String}
+			 # @param pieces{Array}
+			 # @return Joined array as a string
+			 ###
 			@implode: (glue, pieces) ->
 				if not glue?
 					throw new Error('You must give a glue to join pieces')
@@ -12,12 +22,18 @@ miam(
 				else 
 					s = ''
 					for i in [0..pieces.length - 1]
-						if (i == 0)
+						if i is 0
 							s += pieces[i]
 						else
 							s += glue + pieces[i]
 					s	
 
+			###
+			 # Explode string using the given delimiter
+			 # @param delimiter{String}
+			 # @param string{String}
+			 # @return Array with elements from given string
+			 ###
 			@explode: (delimiter, string) ->
 				if not delimiter?
 					throw new Error('You must give a delimiter to explode your string')
@@ -27,7 +43,7 @@ miam(
 					a = []
 					tmp = ''
 					for i in [0..string.length - 1]
-						if string[i] == delimiter
+						if string[i] is delimiter
 							a.push tmp
 							tmp = ''
 						else 
