@@ -52,7 +52,7 @@ require(
 
                 # QuoJS is incompatible with IE
                 # Load it only if it's not this guy
-                if navigator.userAgent.match(/MSIE (\d+\.\d+);/)
+                if /MSIE (\d+\.\d+);/.test(navigator.userAgent)
                     define 'quoJS', []
                 else
                     define 'quoJS', ['vendor/quo.2.3.6']
