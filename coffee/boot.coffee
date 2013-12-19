@@ -13,9 +13,9 @@
 # Load boot module
 require(
     [
-        JSFOLDER + 'system/default/Module'
-        JSFOLDER + 'system/default/StackElement'
-        JSFOLDER + 'system/default/Stack'
+        JSFOLDER + 'system/default/Module.js'
+        JSFOLDER + 'system/default/StackElement.js'
+        JSFOLDER + 'system/default/Stack.js'
     ]
     () =>
         ###

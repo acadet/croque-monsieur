@@ -17,7 +17,7 @@
     }
   })();
 
-  require([JSFOLDER + 'system/default/Module', JSFOLDER + 'system/default/StackElement', JSFOLDER + 'system/default/Stack'], function() {
+  require([JSFOLDER + 'system/default/Module.js', JSFOLDER + 'system/default/StackElement.js', JSFOLDER + 'system/default/Stack.js'], function() {
     /*
      # @class Croque
      # @brief Loads needed class and all its dependencies. Set default config
