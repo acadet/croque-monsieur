@@ -48,6 +48,9 @@ miam(
 			setContent: (c) ->
 				@tag.html c
 
+			setAttr: (key, value) ->
+				@tag.attr key, value
+
 			###
 			 # Set a data element
 			 # @param key{String}
