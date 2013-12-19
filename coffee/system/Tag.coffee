@@ -48,6 +48,11 @@ miam(
 			setContent: (c) ->
 				@tag.html c
 
+			###
+			 # Set attribute to current tag
+			 # @param key{String}
+			 # @param value{String}
+			 ###
 			setAttr: (key, value) ->
 				@tag.attr key, value
 

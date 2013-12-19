@@ -36,7 +36,7 @@ miam(
 				$(document).find('img.' + @class).each () =>
 					if Environment.getWidth < 500
 						@changeOnly $(this), 'src', $(this).attr('data-img-small')
-					else if Environment.getWidth < 500
+					else if Environment.getWidth < 1000
 						@changeOnly $(this), 'src', $(this).attr('data-img-medium')
 					else
 						@changeOnly $(this), 'src', $(this).attr('data-img-large')
