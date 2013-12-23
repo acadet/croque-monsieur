@@ -74,7 +74,7 @@ miam(
 					@appendToLog 'Success: ' + e.message
 
 			###
-			 # Assert element is true
+			 # Assert element is defined
 			 # @param e{Object}
 			 ###
 			assert: (e) ->
@@ -83,7 +83,7 @@ miam(
 					@ok++
 					@appendToLog 'Success'
 				else
-					@appendToLog 'Fail: expected to be true: ' + e
+					@appendToLog 'Fail: expected to be defined: ' + e
 				
 			###
 			 # Start test. Create a new log and reset counters

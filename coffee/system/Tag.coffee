@@ -83,18 +83,24 @@ miam(
 			 # @param $wrapper{jQuery Object}
 			 ###
 			horizontal: ($wrapper) ->
+				Tag.horizontal @tag, $wrapper
+
+			@horizontal: ($element, $wrapper) ->
 				if not $wrapper? then $wrapper = $('body')
-				@tag.css
-					left : ($wrapper.outerWidth() - @tag.outerWidth()) / 2
+				$element.css
+					left : ($wrapper.outerWidth() - $element.outerWidth()) / 2
 
 			###
 			 # Centerize element vertically. Use body by default
 			 # @param $wrapper{jQuery Object}
 			 ###
 			vertical: ($wrapper) ->
+				Tag.vertical @tag, $wrapper
+
+			@vertical: ($element, $wrapper) ->
 				if not $wrapper? then $wrapper = $('body')
-				@tag.css
-					top : ($wrapper.outerHeight() - @tag.outerHeight()) / 2
+				$element.css
+					top : ($wrapper.outerHeight() - $element.outerHeight()) / 2
 
 			###
 			 # Centerize element. Use body by default
@@ -103,6 +109,10 @@ miam(
 			centerize: ($wrapper) ->
 				@horizontal $wrapper
 				@vertical $wrapper
+
+			@centerize: ($element, $wrapper) ->
+				Tag.horizontal $element, $wrapper
+				Tag.vertical $element, $wrapper
 
 			###
 			 # Cast tag to jquery object
