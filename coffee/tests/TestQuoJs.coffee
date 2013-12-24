@@ -8,6 +8,5 @@ miam(
 		class TestQuoJs extends TestUnit
 			constructor: () ->
 				$$(document).on 'touch', () =>
-					console.log 'coucou'
 					alert 'hello!'
 )
