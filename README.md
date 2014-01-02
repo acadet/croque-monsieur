@@ -1,5 +1,4 @@
-#Croque Monsieur#
-
+http://croque-monsieur.adriencadet.com/assets/img/dark_logo.png
 
 ##A tasty and light CoffeeScript boilerplate for web developers.##
 
