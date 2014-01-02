@@ -1,10 +1,9 @@
 #Croque Monsieur#
 
 
-**A tasty and light CoffeeScript boilerplate for web developers.**
+##A tasty and light CoffeeScript boilerplate for web developers.##
 
-
-Go on official website to know more about it: http://croquemonsieur.adriencadet.com/
+Visit official website to know more about it: http://croquemonsieur.adriencadet.com/
 
 ##Changelog##
 
