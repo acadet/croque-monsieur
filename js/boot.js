@@ -17,7 +17,7 @@
     }
   })();
 
-  require([JSFOLDER + 'system/default/Module.js', JSFOLDER + 'system/default/StackElement.js', JSFOLDER + 'system/default/Stack.js'], function() {
+  require([JSFOLDER + 'system/default/Module.js', JSFOLDER + 'system/default/Vertice.js', JSFOLDER + 'system/default/OrientedGraph.js'], function() {
     /*
      # @class Croque
      # @brief Loads needed class and all its dependencies. Set default config
@@ -32,7 +32,9 @@
         this.className = this.extractClass(c);
         this.loaded = 0;
         this.total = 0;
-        this.stack = new Stack;
+        this.graph = new OrientedGraph();
+        this.rootVertice = new Vertice(new Module(this.className));
+        this.graph.addVertice(this.rootVertice);
         this.fixConsole();
         require.config({
           baseUrl: this.folder,
@@ -60,11 +62,18 @@
         require(['jquery', 'modernizr', 'system/default/Environment', 'system/default/Log'], function() {
           return require([_this.classPath], function() {
             return _this.whenReady(function() {
-              var e, m;
-              while (!_this.stack.isEmpty()) {
-                m = _this.stack.pop().getContent();
-                window[m.getName()] = (m.getDeclaration())();
-              }
+              var browser, e;
+              browser = function(v) {
+                var m;
+                if (v.isWhite()) {
+                  v.setGrey();
+                  _this.graph.mapNeighborhood(v, browser);
+                  v.setBlack();
+                  m = v.getContent();
+                  return window[m.getName()] = (m.getDeclaration())();
+                }
+              };
+              browser(_this.rootVertice);
               try {
                 return eval("new " + _this.className + "()");
               } catch (_error) {
@@ -150,10 +159,26 @@
         this.total++;
         define(name, deps);
         return require([name], function() {
-          var s;
+          var d, root, s, v, _i, _len, _results;
           _this.loaded++;
           s = _this.extractClass(name);
-          return _this.stack.push(new StackElement(new Module(s, declaration)));
+          root = _this.graph.find(s);
+          if (root == null) {
+            throw new Error('Module should have already appended to graph');
+          }
+          root.getContent().setDeclaration(declaration);
+          _results = [];
+          for (_i = 0, _len = deps.length; _i < _len; _i++) {
+            d = deps[_i];
+            v = new Vertice(new Module(_this.extractClass(d)));
+            if (!_this.graph.inGraph(v)) {
+              _this.graph.addVertice(v);
+              _results.push(_this.graph.bindVertices(root, v));
+            } else {
+              _results.push(void 0);
+            }
+          }
+          return _results;
         });
       };
 

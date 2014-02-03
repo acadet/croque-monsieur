@@ -1,1 +1,0 @@
-var Log;Log=function(){function n(){}return n.enabled=!0,n.i=function(o){return n.enabled?console.log("[CM INFO] "+o):void 0},n.w=function(o){return n.enabled?console.log("%c[CM WARNING] "+o,"color : red"):void 0},n}();

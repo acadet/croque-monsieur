@@ -1,1 +1,0 @@
-var _this=this;Croque.monsieur("system/Enum",[],function(){var n;return n=function(){function n(){}return n}()});

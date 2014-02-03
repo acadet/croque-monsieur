@@ -14,8 +14,8 @@
 require(
     [
         JSFOLDER + 'system/default/Module.js'
-        JSFOLDER + 'system/default/StackElement.js'
-        JSFOLDER + 'system/default/Stack.js'
+        JSFOLDER + 'system/default/Vertice.js'
+        JSFOLDER + 'system/default/OrientedGraph.js'
     ]
     () =>
         ###
@@ -29,7 +29,12 @@ require(
                 @className = @extractClass c # Name of needed class
                 @loaded = 0 # Number of modules currently loaded
                 @total = 0 # Amount of modules
-                @stack = new Stack # Stack to manage dependencies
+
+                @graph = new OrientedGraph() # Graph to manage dependencies
+
+                @rootVertice = new Vertice(new Module(@className)) # Root vertice, last dep to execute
+
+                @graph.addVertice @rootVertice
                 
                 @fixConsole()
 
@@ -73,9 +78,20 @@ require(
                                 @whenReady () =>
                                     # First execute each declaration of class
                                     # And add to global environment
-                                    while not @stack.isEmpty()
-                                        m = @stack.pop().getContent()
-                                        window[m.getName()] = (m.getDeclaration())()
+                                    
+                                    #Browses Graph with a deep method
+                                    browser = (v) =>
+                                        if v.isWhite()
+                                            v.setGrey()
+                                            
+                                            @graph.mapNeighborhood v, browser
+                                            
+                                            v.setBlack()
+                                            m = v.getContent()
+                                            window[m.getName()] = (m.getDeclaration())()
+
+                                    browser(@rootVertice)
+
                                     try
                                         eval "new " + @className + "()"
                                     catch e
@@ -153,12 +169,29 @@ require(
                 
                 @total++
                 define name, deps
+                
                 require [name], () =>
                     @loaded++
                     s = @extractClass name
-                    # Add declaration to stack
+
+                    # Updates declaration of a module
+                    # Each mod should have been added to the graph before, due to deps
+                    
+                    root = @graph.find(s)
+
+                    if not root?
+                        throw new Error 'Module should have already appended to graph'
+
                     # Above all, do not execute it now, wait for dependencies
-                    @stack.push new StackElement(new Module s, declaration)
+                    root.getContent().setDeclaration(declaration)
+
+                    for d in deps
+                        v = new Vertice(new Module(@extractClass(d)))
+
+                        if not @graph.inGraph(v)
+                            @graph.addVertice v
+                            @graph.bindVertices root, v
+
 
             ###
              # Execute a function when init is done
