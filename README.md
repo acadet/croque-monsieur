@@ -8,6 +8,9 @@ You want to point out an issue? Let me know on Github's tracker.
 
 ##Changelog##
 
+###0.2###
+Adds interface. Updates dependencies management using graphs. 
+
 ###0.1###
 
 First release. Inits beta version.
