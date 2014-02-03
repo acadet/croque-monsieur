@@ -39,7 +39,7 @@ require(
                 @fixConsole()
 
                 # RequireJS config
-                require.config(
+                @requireConfig =
                     baseUrl: @folder
                     paths: 
                         jquery: 'vendor/jquery.1.10.2'
@@ -53,6 +53,10 @@ require(
                             exports: '$$'
                     # Uncomment line below for avoiding cache troubles when developing
                     urlArgs: "bust=" + (new Date()).getTime()
+
+
+                require.config(
+                    @requireConfig
                 )
 
                 # QuoJS is incompatible with IE
@@ -69,6 +73,7 @@ require(
                         'modernizr'
                         'system/default/Environment'
                         'system/default/Log'
+                        'system/default/Interface'
                     ]
                     () =>
                         require( 
@@ -167,30 +172,31 @@ require(
                 if not deps? then throw new Error 'Your module needs at least an empty array of dependencies'
                 if not declaration? then throw new Error 'Your module needs a declaration'
                 
-                @total++
-                define name, deps
+                s = @extractClass name
+
+                # Updates declaration of a module
+                # Each mod should have been added to the graph before, due to deps
                 
-                require [name], () =>
-                    @loaded++
-                    s = @extractClass name
+                root = @graph.find(s)
 
-                    # Updates declaration of a module
-                    # Each mod should have been added to the graph before, due to deps
-                    
-                    root = @graph.find(s)
+                if not root?
+                    throw new Error 'Module should have already been in graph'
 
-                    if not root?
-                        throw new Error 'Module should have already appended to graph'
+                # Above all, do not execute it now, wait for dependencies
+                root.getContent().setDeclaration(declaration)
 
-                    # Above all, do not execute it now, wait for dependencies
-                    root.getContent().setDeclaration(declaration)
-
-                    for d in deps
+                for d in deps
+                    if @requireConfig.paths[d]?
+                        require [d]
+                    else
                         v = new Vertice(new Module(@extractClass(d)))
 
                         if not @graph.inGraph(v)
+                            @total++
                             @graph.addVertice v
                             @graph.bindVertices root, v
+                            require [d]
+                @loaded++
 
 
             ###

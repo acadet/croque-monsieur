@@ -36,7 +36,7 @@
         this.rootVertice = new Vertice(new Module(this.className));
         this.graph.addVertice(this.rootVertice);
         this.fixConsole();
-        require.config({
+        this.requireConfig = {
           baseUrl: this.folder,
           paths: {
             jquery: 'vendor/jquery.1.10.2',
@@ -53,13 +53,14 @@
             }
           },
           urlArgs: "bust=" + (new Date()).getTime()
-        });
+        };
+        require.config(this.requireConfig);
         if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
           define('quoJS', []);
         } else {
           define('quoJS', ['vendor/quo.2.3.6']);
         }
-        require(['jquery', 'modernizr', 'system/default/Environment', 'system/default/Log'], function() {
+        require(['jquery', 'modernizr', 'system/default/Environment', 'system/default/Log', 'system/default/Interface'], function() {
           return require([_this.classPath], function() {
             return _this.whenReady(function() {
               var browser, e;
@@ -146,7 +147,7 @@
 
 
       Croque.prototype.miam = function(name, deps, declaration) {
-        var _this = this;
+        var d, root, s, v, _i, _len;
         if (name == null) {
           throw new Error('Your module needs a name');
         }
@@ -156,30 +157,27 @@
         if (declaration == null) {
           throw new Error('Your module needs a declaration');
         }
-        this.total++;
-        define(name, deps);
-        return require([name], function() {
-          var d, root, s, v, _i, _len, _results;
-          _this.loaded++;
-          s = _this.extractClass(name);
-          root = _this.graph.find(s);
-          if (root == null) {
-            throw new Error('Module should have already appended to graph');
-          }
-          root.getContent().setDeclaration(declaration);
-          _results = [];
-          for (_i = 0, _len = deps.length; _i < _len; _i++) {
-            d = deps[_i];
-            v = new Vertice(new Module(_this.extractClass(d)));
-            if (!_this.graph.inGraph(v)) {
-              _this.graph.addVertice(v);
-              _results.push(_this.graph.bindVertices(root, v));
-            } else {
-              _results.push(void 0);
+        s = this.extractClass(name);
+        root = this.graph.find(s);
+        if (root == null) {
+          throw new Error('Module should have already been in graph');
+        }
+        root.getContent().setDeclaration(declaration);
+        for (_i = 0, _len = deps.length; _i < _len; _i++) {
+          d = deps[_i];
+          if (this.requireConfig.paths[d] != null) {
+            require([d]);
+          } else {
+            v = new Vertice(new Module(this.extractClass(d)));
+            if (!this.graph.inGraph(v)) {
+              this.total++;
+              this.graph.addVertice(v);
+              this.graph.bindVertices(root, v);
+              require([d]);
             }
           }
-          return _results;
-        });
+        }
+        return this.loaded++;
       };
 
       /*

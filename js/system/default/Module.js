@@ -1,0 +1,1 @@
+var Module;Module=function(){function t(t,e){this.name=t,this.declaration=e}return t.prototype.getName=function(){return this.name},t.prototype.setName=function(t){return this.name=t},t.prototype.getDeclaration=function(){return this.declaration},t.prototype.setDeclaration=function(t){return this.declaration=t},t}();
