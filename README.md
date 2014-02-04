@@ -10,7 +10,7 @@ You want to point out an issue? Let me know on Github's tracker.
 
 ###0.3###
 
-Updates dependencies management. Adds missing comments.
+Updates dependencies management. Adds missing comments. Improves default Log
 
 ###0.2###
 
