@@ -20,7 +20,7 @@
   require([JSFOLDER + 'system/default/Module.js', JSFOLDER + 'system/default/Vertice.js', JSFOLDER + 'system/default/OrientedGraph.js'], function() {
     /*
      # @class Croque
-     # @brief Loads needed class and all its dependencies. Set default config
+     # @brief Loads needed class and all its dependencies. Sets default config
     */
 
     var Croque;
@@ -168,13 +168,14 @@
           if (this.requireConfig.paths[d] != null) {
             require([d]);
           } else {
-            v = new Vertice(new Module(this.extractClass(d)));
-            if (!this.graph.inGraph(v)) {
+            v = this.graph.find(this.extractClass(d));
+            if (v == null) {
+              v = new Vertice(new Module(this.extractClass(d)));
               this.total++;
               this.graph.addVertice(v);
-              this.graph.bindVertices(root, v);
               require([d]);
             }
+            this.graph.bindVertices(root, v);
           }
         }
         return this.loaded++;

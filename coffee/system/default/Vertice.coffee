@@ -1,8 +1,13 @@
+###
+ # @class Vertice
+ # @brief Wraps module for dep management
+ ###
 class Vertice
+	# Colors represents if a vertice has already been visited
 	@colors =
-		WHITE : 0
-		GREY : 1
-		BLACK : 2
+		WHITE : 0 # First time
+		GREY : 1 # Already visited
+		BLACK : 2 # Already visited and neighbors loaded
 
 	constructor: (content) ->
 		@content = content

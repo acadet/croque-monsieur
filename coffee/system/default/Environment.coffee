@@ -1,11 +1,25 @@
+###
+ # @class Environment
+ # @brief Environment management. Provides details about window or used device
+ ###
 class Environment
-  @getWidth: () ->
-    if self.innerWidth? then self.innerWidth
-    else document.documentElement.clientWidth
-    
-  @getHeight: () ->
-    if self.innerHeight? then self.innerHeight
-    else document.documentElement.clientHeight
-    
-  @isTouchable: () ->
-    (/Android|webOS|iPhone|Windows Phone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
+
+	###
+	 # Returns width of window
+	 ###
+	@getWidth: () ->
+		if self.innerWidth? then self.innerWidth
+		else document.documentElement.clientWidth
+
+	###
+	 # Returns height of window
+	 ###
+	@getHeight: () ->
+		if self.innerHeight? then self.innerHeight
+		else document.documentElement.clientHeight
+
+	###
+	 # Informs if used device is touchable
+	 ###
+	@isTouchable: () ->
+		(/Android|webOS|iPhone|Windows Phone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))

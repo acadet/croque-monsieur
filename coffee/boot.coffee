@@ -20,7 +20,7 @@ require(
     () =>
         ###
          # @class Croque
-         # @brief Loads needed class and all its dependencies. Set default config
+         # @brief Loads needed class and all its dependencies. Sets default config
          ###
         class Croque
             constructor: (folder, c) ->
@@ -39,6 +39,7 @@ require(
                 @fixConsole()
 
                 # RequireJS config
+                # Customize your config as your like
                 @requireConfig =
                     baseUrl: @folder
                     paths: 
@@ -84,7 +85,7 @@ require(
                                     # First execute each declaration of class
                                     # And add to global environment
                                     
-                                    #Browses Graph with a deep method
+                                    # Browses Graph with a deep method
                                     browser = (v) =>
                                         if v.isWhite()
                                             v.setGrey()
@@ -185,17 +186,23 @@ require(
                 # Above all, do not execute it now, wait for dependencies
                 root.getContent().setDeclaration(declaration)
 
+                # Load dependencies
                 for d in deps
                     if @requireConfig.paths[d]?
                         require [d]
                     else
-                        v = new Vertice(new Module(@extractClass(d)))
+                        v = @graph.find(@extractClass(d))
 
-                        if not @graph.inGraph(v)
+                        # First time encountering a dep
+                        if not v?
+                            v = new Vertice(new Module(@extractClass(d)))
                             @total++
                             @graph.addVertice v
-                            @graph.bindVertices root, v
                             require [d]
+
+                        # Everytime, add dep into graph
+                        @graph.bindVertices root, v
+
                 @loaded++
 
 

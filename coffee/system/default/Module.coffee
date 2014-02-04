@@ -1,3 +1,7 @@
+###
+ # @class Module
+ # @brief Used struct to manage dependencies
+ ###
 class Module
     constructor: (name, declaration) ->
         @name = name
