@@ -19,14 +19,14 @@ miam(
 					throw new Error('You must give a glue to join pieces')
 				else if not pieces? or pieces.length <= 0
 					throw new Error('You should have at least one piece to implode')
-				else 
+				else
 					s = ''
 					for i in [0..pieces.length - 1]
 						if i is 0
 							s += pieces[i]
 						else
 							s += glue + pieces[i]
-					s	
+					s
 
 			###
 			 # Explode string using the given delimiter
@@ -46,10 +46,21 @@ miam(
 						if string[i] is delimiter
 							a.push tmp
 							tmp = ''
-						else 
+						else
 							tmp += string[i]
 
 					a.push tmp
 					a
+
+			###
+			 # Concats 2 JSON objects
+			 # @param obj1 Destination
+			 # @param obj2 Object to append
+			 ###
+			@concatJSON: (obj1, obj2) ->
+				for key, value of obj2
+					obj1[key] = value
+
+				obj1
 
 )

@@ -76,7 +76,7 @@
               };
               browser(_this.rootVertice);
               try {
-                return eval("new " + _this.className + "()");
+                return _this.mainClass = eval("new " + _this.className + "()");
               } catch (_error) {
                 e = _error;
                 Log.w("CroqueMonsieur: error when constructing main class: " + e.message);
@@ -109,6 +109,10 @@
           }
         }
         return true;
+      };
+
+      Croque.prototype.getMainClass = function() {
+        return this.mainClass;
       };
 
       /*
@@ -165,7 +169,7 @@
         root.getContent().setDeclaration(declaration);
         for (_i = 0, _len = deps.length; _i < _len; _i++) {
           d = deps[_i];
-          if (this.requireConfig.paths[d] != null) {
+          if ((this.requireConfig.paths[d] != null) || d === 'quoJS') {
             require([d]);
           } else {
             v = this.graph.find(this.extractClass(d));

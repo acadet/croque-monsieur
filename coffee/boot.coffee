@@ -77,7 +77,7 @@ require(
                         'system/default/Interface'
                     ]
                     () =>
-                        require( 
+                        require(
                             [@classPath]
                             () =>
                                 # When all dependencies are loaded, do code below
@@ -99,7 +99,7 @@ require(
                                     browser(@rootVertice)
 
                                     try
-                                        eval "new " + @className + "()"
+                                        @mainClass = eval "new " + @className + "()"
                                     catch e
                                         Log.w "CroqueMonsieur: error when constructing main class: " + e.message
                                         Log.w e.stack
@@ -143,6 +143,9 @@ require(
                     method = methods[length]
                     if not console[method] then console[method] = noop
                 true
+
+            getMainClass: () ->
+                @mainClass
 
             ###
              # Extract class from given path
@@ -188,7 +191,7 @@ require(
 
                 # Load dependencies
                 for d in deps
-                    if @requireConfig.paths[d]?
+                    if @requireConfig.paths[d]? or d is 'quoJS'
                         require [d]
                     else
                         v = @graph.find(@extractClass(d))
@@ -211,7 +214,7 @@ require(
              # (deps are all loaded)
              ###
             whenReady: (f) ->
-                if @loaded >= @total 
+                if @loaded >= @total
                     f()
                 else
                     setTimeout(
@@ -223,5 +226,5 @@ require(
         # Bind to global environement
         window.Croque = new Croque(JSFOLDER, CROQUECLASS)
         window.miam = (name, deps, declaration) ->
-            window.Croque.miam name, deps, declaration        
+            window.Croque.miam name, deps, declaration
 )

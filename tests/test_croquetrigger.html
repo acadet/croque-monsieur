@@ -4,16 +4,26 @@
 	<head>
 	  <meta charset="utf-8">
 
-	  <title>TestQuoJS</title>
+	  <title>TestCroqueTrigger</title>
 	  <script type="text/javascript">
 	  	var JSFOLDER = '../js/';
-	  	var CROQUECLASS = 'tests/TestQuoJs';
+	  	var CROQUECLASS = 'tests/TestCroqueTrigger';
 	  </script>
 	  <script type="text/javascript" src="../js/vendor/require.2.1.9.js"></script>
 	  <script type="text/javascript" src="../js/boot.js"></script>
+	  <style>
+		div {
+			width: 100px;
+			height: 100px;
+			color: white;
+			text-align: center;
+		}
+	  </style>
 	</head>
 
 	<body>
-		<h1>TestQuoJs</h1>
+		<h1>TestCroqueTrigger</h1>
+		<div style="background-color : red;" data-onClick="clicked">Click me</div>
+
 	</body>
 </html>

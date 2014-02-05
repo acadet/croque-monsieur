@@ -21,7 +21,8 @@ class Log
 
 	###
 	 # Prints a warning msg
-	 ###		
+	 ###
 	@w: (m) ->
 		if Log.level >= 1
 			console.log '%c[CM WARNING] ' + m, 'color : red'
+			console.trace()
