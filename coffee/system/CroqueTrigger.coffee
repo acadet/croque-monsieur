@@ -40,7 +40,7 @@ miam(
 			@setMouseEvents: () ->
 				events = [
 					'click'
-					'dbclick'
+					'dbClick'
 					'mouseEnter'
 					'mouseLeave'
 					'mouseMove'

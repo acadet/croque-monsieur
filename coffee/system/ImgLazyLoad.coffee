@@ -15,6 +15,9 @@ miam(
 		class ImgLazyLoad
 			@defaultClass = 'lazy-img'
 
+			###
+			 # Runs img lazy loader
+			 ###
 			@run: (customClass) ->
 				if customClass?
 					ImgLazyLoad.defaultClass = customClass
