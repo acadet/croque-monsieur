@@ -8,6 +8,10 @@ You want to point out an issue? Let me know on Github's tracker.
 
 ##Changelog##
 
+###0.4###
+
+Updates documentation. Adds config file to make updating easier. Adds CroqueTrigger system. Updates ImgLazyLoad. Adds ExceptionHandler
+
 ###0.3###
 
 Updates dependencies management. Adds missing comments. Improves default Log
