@@ -8,16 +8,24 @@ class Log
 	 # Level of log
 	 # 0: no log
 	 # 1: only errors
-	 # 2: all details
+	 # 2: errors + info
+	 # 3: all details
 	 ###
-	@level = 2
+	@level = 3
+
+	###
+	 # Prints a debug msg
+	 ###
+	@d: (m) ->
+		if Log.level >= 3
+			console.log '[CM DEBUG] ' + m
 
 	###
 	 # Prints a info msg
 	 ###
 	@i: (m) ->
 		if Log.level >= 2
-			console.log '[CM INFO] ' + m
+			console.log '%c[CM INFO] ' + m, 'color : blue'
 
 	###
 	 # Prints a warning msg
