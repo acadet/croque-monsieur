@@ -13,9 +13,10 @@
 # Load boot module
 require(
     [
-        JSFOLDER + 'system/default/Module.js'
-        JSFOLDER + 'system/default/Vertice.js'
-        JSFOLDER + 'system/default/OrientedGraph.js'
+        JSFOLDER + 'system/default/Module'
+        JSFOLDER + 'system/default/Vertice'
+        JSFOLDER + 'system/default/OrientedGraph'
+        JSFOLDER + 'config'
     ]
     () =>
         ###
@@ -28,7 +29,7 @@ require(
                 @classPath = c # Path to needed class
                 @className = @extractClass c # Name of needed class
                 @loaded = 0 # Number of modules currently loaded
-                @total = 0 # Amount of modules
+                @total = 0 # Amount of modules (without the croque class)
 
                 @graph = new OrientedGraph() # Graph to manage dependencies
 
@@ -38,44 +39,39 @@ require(
                 
                 @fixConsole()
 
-                # RequireJS config
-                # Customize your config as your like
                 @requireConfig =
                     baseUrl: @folder
-                    paths:
-                        jquery: 'vendor/jquery.1.10.2'
-                        jqueryCookie: 'vendor/jquery-cookie.1.4.0'
-                        modernizr: 'vendor/modernizr.2.7.1'
-                        jqueryUI: 'vendor/jquery-ui.1.10.3'
-                    shim:
-                        jquery:
-                            exports: '$'
-                        quoJS:
-                            exports: '$$'
-                    # Uncomment line below for avoiding cache troubles when developing
-                    urlArgs: "bust=" + (new Date()).getTime()
+                
+                if CROQUE_CONFIG.cache
+                    @requireConfig.urlArgs = "bust=" + (new Date()).getTime()
 
+                for key, value of CROQUE_CONFIG.libs
+                    if key in CROQUE_CONFIG.IESupport
+                        if /MSIE (\d+\.\d+);/.test(navigator.userAgent)
+                            define key, []
+                        else
+                            define key, [value]
+                    else
+                        if not @requireConfig.paths?
+                            @requireConfig.paths = {}
+                        @requireConfig.paths[key] = value
+
+                for key, value of CROQUE_CONFIG.exports
+                    if not @requireConfig.shim
+                        @requireConfig.shim = {}
+                    @requireConfig.shim[key] =
+                        exports: value
+
+                for key, value of CROQUE_CONFIG.extras
+                    @requireConfig[key] = value
 
                 require.config(
                     @requireConfig
                 )
 
-                # QuoJS is incompatible with IE
-                # Load it only if it's not this guy
-                if /MSIE (\d+\.\d+);/.test(navigator.userAgent)
-                    define 'quoJS', []
-                else
-                    define 'quoJS', ['vendor/quo.2.3.6']
-
                 # Launch main class' requirement
                 require(
-                    [
-                        'jquery'
-                        'modernizr'
-                        'system/default/Environment'
-                        'system/default/Log'
-                        'system/default/Interface'
-                    ]
+                    CROQUE_CONFIG.default
                     () =>
                         require(
                             [@classPath]

@@ -6,7 +6,8 @@
 
 
 (function() {
-  var _this = this;
+  var _this = this,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   (function() {
     if (typeof JSFOLDER === "undefined" || JSFOLDER === null) {
@@ -17,7 +18,7 @@
     }
   })();
 
-  require([JSFOLDER + 'system/default/Module.js', JSFOLDER + 'system/default/Vertice.js', JSFOLDER + 'system/default/OrientedGraph.js'], function() {
+  require([JSFOLDER + 'system/default/Module', JSFOLDER + 'system/default/Vertice', JSFOLDER + 'system/default/OrientedGraph', JSFOLDER + 'config'], function() {
     /*
      # @class Croque
      # @brief Loads needed class and all its dependencies. Sets default config
@@ -26,7 +27,8 @@
     var Croque;
     Croque = (function() {
       function Croque(folder, c) {
-        var _this = this;
+        var key, value, _ref, _ref1, _ref2,
+          _this = this;
         this.folder = folder;
         this.classPath = c;
         this.className = this.extractClass(c);
@@ -37,30 +39,44 @@
         this.graph.addVertice(this.rootVertice);
         this.fixConsole();
         this.requireConfig = {
-          baseUrl: this.folder,
-          paths: {
-            jquery: 'vendor/jquery.1.10.2',
-            jqueryCookie: 'vendor/jquery-cookie.1.4.0',
-            modernizr: 'vendor/modernizr.2.7.1',
-            jqueryUI: 'vendor/jquery-ui.1.10.3'
-          },
-          shim: {
-            jquery: {
-              exports: '$'
-            },
-            quoJS: {
-              exports: '$$'
-            }
-          },
-          urlArgs: "bust=" + (new Date()).getTime()
+          baseUrl: this.folder
         };
-        require.config(this.requireConfig);
-        if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
-          define('quoJS', []);
-        } else {
-          define('quoJS', ['vendor/quo.2.3.6']);
+        if (CROQUE_CONFIG.cache) {
+          this.requireConfig.urlArgs = "bust=" + (new Date()).getTime();
         }
-        require(['jquery', 'modernizr', 'system/default/Environment', 'system/default/Log', 'system/default/Interface'], function() {
+        _ref = CROQUE_CONFIG.libs;
+        for (key in _ref) {
+          value = _ref[key];
+          if (__indexOf.call(CROQUE_CONFIG.IESupport, key) >= 0) {
+            if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
+              define(key, []);
+            } else {
+              define(key, [value]);
+            }
+          } else {
+            if (this.requireConfig.paths == null) {
+              this.requireConfig.paths = {};
+            }
+            this.requireConfig.paths[key] = value;
+          }
+        }
+        _ref1 = CROQUE_CONFIG.exports;
+        for (key in _ref1) {
+          value = _ref1[key];
+          if (!this.requireConfig.shim) {
+            this.requireConfig.shim = {};
+          }
+          this.requireConfig.shim[key] = {
+            exports: value
+          };
+        }
+        _ref2 = CROQUE_CONFIG.extras;
+        for (key in _ref2) {
+          value = _ref2[key];
+          this.requireConfig[key] = value;
+        }
+        require.config(this.requireConfig);
+        require(CROQUE_CONFIG["default"], function() {
           return require([_this.classPath], function() {
             return _this.whenReady(function() {
               var browser, e;
