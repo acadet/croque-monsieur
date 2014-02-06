@@ -166,7 +166,9 @@
         if (root == null) {
           throw new Error('Module should have already been in graph');
         }
-        root.getContent().setDeclaration(declaration);
+        if (root.getContent().getDeclaration() == null) {
+          root.getContent().setDeclaration(declaration);
+        }
         for (_i = 0, _len = deps.length; _i < _len; _i++) {
           d = deps[_i];
           if ((this.requireConfig.paths[d] != null) || d === 'quoJS') {

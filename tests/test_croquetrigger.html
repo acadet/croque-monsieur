@@ -17,13 +17,25 @@
 			height: 100px;
 			color: white;
 			text-align: center;
+			margin: 30px 0;
+		}
+
+		input {
+			width: 150px;
 		}
 	  </style>
 	</head>
 
 	<body>
 		<h1>TestCroqueTrigger</h1>
-		<div style="background-color : red;" data-onClick="clicked">Click me</div>
+
+		<div style="background-color : red;" data-onClick="click">Click me</div>
+
+		<div style="background-color : blue;" data-onMouseEnter="mouseEnter">Mouse enter</div>
+
+		<input data-onKeyPress="keyPress" />
+
+		<div style="background-color: green" data-onHold="hold">Swipe me up</div>
 
 	</body>
 </html>

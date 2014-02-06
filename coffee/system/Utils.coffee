@@ -63,4 +63,10 @@ miam(
 
 				obj1
 
+			@capitalize: (string) ->
+				if string.length < 1
+					throw new Error 'Unable to capitalize: string is too short'
+
+				string.substr(0, 1).toUpperCase() + string.slice(1)
+
 )

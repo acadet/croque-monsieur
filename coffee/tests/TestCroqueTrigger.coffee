@@ -8,9 +8,19 @@ miam(
 		class TestCroqueTrigger extends TestUnit
 			constructor: () ->
 				super TestUnit.outputs.HTML
+				CroqueTrigger.run()
 
-				new CroqueTrigger()
+			click: (e) ->
+				Log.i "Click"
 
-			clicked: ($element) ->
-				alert "You've clicked me!"
+			mouseEnter: (e) ->
+				Log.i "Mouse enter"
+
+			keyPress: (e, event) ->
+				Log.i event.which
+
+			hold: (e) ->
+				Log.i "Hold"
+
+
 )

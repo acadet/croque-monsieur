@@ -42,13 +42,13 @@ require(
                 # Customize your config as your like
                 @requireConfig =
                     baseUrl: @folder
-                    paths: 
+                    paths:
                         jquery: 'vendor/jquery.1.10.2'
                         jqueryCookie: 'vendor/jquery-cookie.1.4.0'
                         modernizr: 'vendor/modernizr.2.7.1'
                         jqueryUI: 'vendor/jquery-ui.1.10.3'
-                    shim: 
-                        jquery: 
+                    shim:
+                        jquery:
                             exports: '$'
                         quoJS:
                             exports: '$$'
@@ -187,7 +187,8 @@ require(
                     throw new Error 'Module should have already been in graph'
 
                 # Above all, do not execute it now, wait for dependencies
-                root.getContent().setDeclaration(declaration)
+                if not root.getContent().getDeclaration()?
+                    root.getContent().setDeclaration(declaration)
 
                 # Load dependencies
                 for d in deps
