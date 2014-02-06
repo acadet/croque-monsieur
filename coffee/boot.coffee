@@ -202,12 +202,11 @@ require(
                             v = new Vertice(new Module(@extractClass(d)))
                             @total++
                             @graph.addVertice v
-                            require [d]
+                            require [d], () =>
+                                @loaded++
 
                         # Everytime, add dep into graph
                         @graph.bindVertices root, v
-
-                @loaded++
 
 
             ###

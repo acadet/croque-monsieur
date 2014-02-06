@@ -151,7 +151,8 @@
 
 
       Croque.prototype.miam = function(name, deps, declaration) {
-        var d, root, s, v, _i, _len;
+        var d, root, s, v, _i, _len, _results,
+          _this = this;
         if (name == null) {
           throw new Error('Your module needs a name');
         }
@@ -169,22 +170,25 @@
         if (root.getContent().getDeclaration() == null) {
           root.getContent().setDeclaration(declaration);
         }
+        _results = [];
         for (_i = 0, _len = deps.length; _i < _len; _i++) {
           d = deps[_i];
           if ((this.requireConfig.paths[d] != null) || d === 'quoJS') {
-            require([d]);
+            _results.push(require([d]));
           } else {
             v = this.graph.find(this.extractClass(d));
             if (v == null) {
               v = new Vertice(new Module(this.extractClass(d)));
               this.total++;
               this.graph.addVertice(v);
-              require([d]);
+              require([d], function() {
+                return _this.loaded++;
+              });
             }
-            this.graph.bindVertices(root, v);
+            _results.push(this.graph.bindVertices(root, v));
           }
         }
-        return this.loaded++;
+        return _results;
       };
 
       /*
