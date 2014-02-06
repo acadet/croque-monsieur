@@ -41,7 +41,7 @@
         this.requireConfig = {
           baseUrl: this.folder
         };
-        if (CROQUE_CONFIG.cache) {
+        if (!CROQUE_CONFIG.cache) {
           this.requireConfig.urlArgs = "bust=" + (new Date()).getTime();
         }
         _ref = CROQUE_CONFIG.libs;
@@ -127,12 +127,17 @@
         return true;
       };
 
+      /*
+       # Gets current main class
+      */
+
+
       Croque.prototype.getMainClass = function() {
         return this.mainClass;
       };
 
       /*
-       # Extract class from given path
+       # Extracts class from given path
       */
 
 
@@ -208,7 +213,7 @@
       };
 
       /*
-       # Execute a function when init is done
+       # Executes a function when init is done
        # (deps are all loaded)
       */
 

@@ -5,8 +5,21 @@ miam(
 		'system/ExceptionHandler'
 	]
 	() =>
+		###
+		 # @class CroqueTrigger
+		 # @brief Sets trigger to specified HTML elements. See official doc for more details
+		 # @description
+		 # Specify events on your HTML elements and bind js callbacks to them.
+		 # The trigger will automatically generate JS listeners.
+		 ###
 		class CroqueTrigger
 
+			###
+			 # From specified event and HTML element, returns
+			 # callback to apply
+			 # @param trigger Event
+			 # @param element JS object
+			 ###
 			@getMethod: (trigger, element) ->
 				if trigger.length < 2
 					throw new Error 'Specified event is not supported'
@@ -21,6 +34,9 @@ miam(
 				return null
 				
 
+			###
+			 # Sets mouse listeners
+			 ###
 			@setMouseEvents: () ->
 				events = [
 					'click'
@@ -47,7 +63,9 @@ miam(
 								ExceptionHandler.handle error
 
 				
-
+			###
+			 # Sets keyboard listeners
+			 ###
 			@setKeyboardEvents: () ->
 				events = [
 					'keyPress'
@@ -67,6 +85,9 @@ miam(
 								Log.w 'An error has occurend when trying applying method'
 								ExceptionHandler.handle error
 
+			###
+			 # Sets touch listeners
+			 ###
 			@setTouchEvents: () ->
 				events = [
 					'singleTap'
@@ -100,6 +121,9 @@ miam(
 								quoJS = true
 								f(s, element)
 
+			###
+			 # Runs croqueTrigger
+			 ###
 			@run: () ->
 				CroqueTrigger.setMouseEvents()
 				CroqueTrigger.setKeyboardEvents()

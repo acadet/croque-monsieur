@@ -39,13 +39,17 @@ require(
                 
                 @fixConsole()
 
+                # Start hydrating config of requireJS using specified user config
                 @requireConfig =
                     baseUrl: @folder
                 
-                if CROQUE_CONFIG.cache
+                # Enable/Disable caching
+                if not CROQUE_CONFIG.cache
                     @requireConfig.urlArgs = "bust=" + (new Date()).getTime()
 
+                # Gathering libs
                 for key, value of CROQUE_CONFIG.libs
+                    # Disable specified libs for IE
                     if key in CROQUE_CONFIG.IESupport
                         if /MSIE (\d+\.\d+);/.test(navigator.userAgent)
                             define key, []
@@ -56,12 +60,14 @@ require(
                             @requireConfig.paths = {}
                         @requireConfig.paths[key] = value
 
+                # Setting exports
                 for key, value of CROQUE_CONFIG.exports
                     if not @requireConfig.shim
                         @requireConfig.shim = {}
                     @requireConfig.shim[key] =
                         exports: value
 
+                # Adding extras if they exist
                 for key, value of CROQUE_CONFIG.extras
                     @requireConfig[key] = value
 
@@ -140,11 +146,14 @@ require(
                     if not console[method] then console[method] = noop
                 true
 
+            ###
+             # Gets current main class
+             ###
             getMainClass: () ->
                 @mainClass
 
             ###
-             # Extract class from given path
+             # Extracts class from given path
              ###
             extractClass: (s) ->
                 if not s? then throw new Error 'extractClass needs a non empty string'
@@ -174,9 +183,8 @@ require(
                 
                 s = @extractClass name
 
-                # Updates declaration of a module
+                # Update declaration of a module
                 # Each mod should have been added to the graph before, due to deps
-                
                 root = @graph.find(s)
 
                 if not root?
@@ -206,7 +214,7 @@ require(
 
 
             ###
-             # Execute a function when init is done
+             # Executes a function when init is done
              # (deps are all loaded)
              ###
             whenReady: (f) ->
