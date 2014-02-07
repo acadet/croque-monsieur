@@ -63,6 +63,10 @@ miam(
 
 				obj1
 
+			###
+			 # Capitalizes first letter of string
+			 # @param string
+			 ###
 			@capitalize: (string) ->
 				if string.length < 1
 					throw new Error 'Unable to capitalize: string is too short'

@@ -41,13 +41,13 @@
         this.requireConfig = {
           baseUrl: this.folder
         };
-        if (!CROQUE_CONFIG.cache) {
+        if (!CROQUECONFIG.cache) {
           this.requireConfig.urlArgs = "bust=" + (new Date()).getTime();
         }
-        _ref = CROQUE_CONFIG.libs;
+        _ref = CROQUECONFIG.libs;
         for (key in _ref) {
           value = _ref[key];
-          if (__indexOf.call(CROQUE_CONFIG.IESupport, key) >= 0) {
+          if (__indexOf.call(CROQUECONFIG.IESupport, key) >= 0) {
             if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
               define(key, []);
             } else {
@@ -60,7 +60,7 @@
             this.requireConfig.paths[key] = value;
           }
         }
-        _ref1 = CROQUE_CONFIG.exports;
+        _ref1 = CROQUECONFIG.exports;
         for (key in _ref1) {
           value = _ref1[key];
           if (!this.requireConfig.shim) {
@@ -70,13 +70,13 @@
             exports: value
           };
         }
-        _ref2 = CROQUE_CONFIG.extras;
+        _ref2 = CROQUECONFIG.extras;
         for (key in _ref2) {
           value = _ref2[key];
           this.requireConfig[key] = value;
         }
         require.config(this.requireConfig);
-        require(CROQUE_CONFIG["default"], function() {
+        require(CROQUECONFIG["default"], function() {
           return require([_this.classPath], function() {
             return _this.whenReady(function() {
               var browser, e;

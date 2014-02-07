@@ -4,7 +4,7 @@
  # @brief This file wraps config of CM. More details on official website
  ###
 
-CROQUE_CONFIG =
+CROQUECONFIG =
 	###
 	 # You can disable cache when developing
 	 ###

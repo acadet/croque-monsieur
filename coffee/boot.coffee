@@ -44,13 +44,13 @@ require(
                     baseUrl: @folder
                 
                 # Enable/Disable caching
-                if not CROQUE_CONFIG.cache
+                if not CROQUECONFIG.cache
                     @requireConfig.urlArgs = "bust=" + (new Date()).getTime()
 
                 # Gathering libs
-                for key, value of CROQUE_CONFIG.libs
+                for key, value of CROQUECONFIG.libs
                     # Disable specified libs for IE
-                    if key in CROQUE_CONFIG.IESupport
+                    if key in CROQUECONFIG.IESupport
                         if /MSIE (\d+\.\d+);/.test(navigator.userAgent)
                             define key, []
                         else
@@ -61,14 +61,14 @@ require(
                         @requireConfig.paths[key] = value
 
                 # Setting exports
-                for key, value of CROQUE_CONFIG.exports
+                for key, value of CROQUECONFIG.exports
                     if not @requireConfig.shim
                         @requireConfig.shim = {}
                     @requireConfig.shim[key] =
                         exports: value
 
                 # Adding extras if they exist
-                for key, value of CROQUE_CONFIG.extras
+                for key, value of CROQUECONFIG.extras
                     @requireConfig[key] = value
 
                 require.config(
@@ -77,7 +77,7 @@ require(
 
                 # Launch main class' requirement
                 require(
-                    CROQUE_CONFIG.default
+                    CROQUECONFIG.default
                     () =>
                         require(
                             [@classPath]
