@@ -32,7 +32,19 @@ miam(
 					Log.w 'An error has occured when trying fixing triggers'
 					ExceptionHandler.handle error
 				return null
-				
+
+			@bindTriggers: (events) ->
+				for e in events
+					$('*[data-on' + Utils.capitalize(e)).each (index, element) =>
+						method = CroqueTrigger.getMethod e, element
+						if not method? then return
+						
+						$(element).on e.toLowerCase(), (event) =>
+							try
+								eval 'window.Croque.getMainClass().' + method + '(element, event)'
+							catch error
+								Log.w 'An error has occurend when trying applying method'
+								ExceptionHandler.handle error
 
 			###
 			 # Sets mouse listeners
@@ -50,17 +62,7 @@ miam(
 					'mouseDown'
 				]
 
-				for e in events
-					$('*[data-on' + Utils.capitalize(e)).each (index, element) =>
-						method = CroqueTrigger.getMethod e, element
-						if not method? then return
-						
-						$(element).on e.toLowerCase(), () =>
-							try
-								eval 'window.Croque.getMainClass().' + method + '(element)'
-							catch error
-								Log.w 'An error has occurend when trying applying method'
-								ExceptionHandler.handle error
+				CroqueTrigger.bindTriggers events
 
 				
 			###
@@ -73,17 +75,7 @@ miam(
 					'keyUp'
 				]
 
-				for e in events
-					$('*[data-on' + Utils.capitalize(e)).each (index, element) =>
-						method = CroqueTrigger.getMethod e, element
-						if not method? then return
-						
-						$(element).on e.toLowerCase(), (event) =>
-							try
-								eval 'window.Croque.getMainClass().' + method + '(element, event)'
-							catch error
-								Log.w 'An error has occurend when trying applying method'
-								ExceptionHandler.handle error
+				CroqueTrigger.bindTriggers events
 
 			###
 			 # Sets touch listeners
