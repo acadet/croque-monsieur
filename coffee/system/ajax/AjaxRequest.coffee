@@ -3,6 +3,8 @@ miam(
 	[]
 	() =>
 		class AjaxRequest
+			#region Constructors
+			
 			constructor: (url) ->
 				@url = url
 				@type = 'GET'
@@ -14,20 +16,43 @@ miam(
 					console.log 'AjaxRequest failed!'
 					console.log error
 
+			#endregion Constructors
+			
+			#region Private
+			
+			#endregion Private
+			
+			#region Public
+
+			getType: () ->
+				@type
+
 			setType: (type) ->
 				@type = type
+
+			getData: () ->
+				@data
 
 			setData: (data) ->
 				@data = data
 
+			getDataType: () ->
+				@dataType
+
 			setDataType: (type) ->
 				@dataType = type
+
+			getSuccess: () ->
+				@success
 
 			setSuccess: (f) ->
 				@success = f
 
+			getError: () ->
+				@error
+
 			setError: (f) ->
-				@error = f	
+				@error = f
 
 			execute: () ->
 				$.ajax(
@@ -37,4 +62,6 @@ miam(
 					success : @success
 					error : @error
 				)
+			
+			#endregion Public
 )

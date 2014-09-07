@@ -1,6 +1,6 @@
 ###
  # @class Module
- # @brief Used struct to manage dependencies
+ # @brief Used structure to manage dependencies
  ###
 class Module
     constructor: (name, declaration) ->

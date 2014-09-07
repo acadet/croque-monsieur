@@ -35,19 +35,19 @@ miam(
 			###
 			 # Static method for getting value of a cookie
 			 ###
-			@getVal: (key) ->
+			@getValue: (key) ->
 				$.cookie key
 
 			###
-			 # Get value of current cookie
+			 # Gets value of current cookie
 			 ###
-			getVal: () ->
+			getValue: () ->
 				@value
 
 			###
-			 # Set value of current cookie
+			 # Sets value of current cookie
 			 ###
-			setVal: (v) ->
+			setValue: (v) ->
 				@value = v
 				$.cookie @key, @value
 
@@ -58,7 +58,7 @@ miam(
 				$.cookie key, null
 
 			###
-			 # Remove current cookie
+			 # Removes current cookie
 			 ###
 			remove: () ->
 				Cookie.remove @key

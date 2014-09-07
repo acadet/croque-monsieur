@@ -1,1 +1,0 @@
-var _this=this;miam("examples/HelloWorld",[],function(){var n;return n=function(){function n(){$("body").append("<h2>If you can read this message, then everything is working fine :)</h2>")}return n}()});

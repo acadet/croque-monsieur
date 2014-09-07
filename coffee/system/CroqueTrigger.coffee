@@ -1,8 +1,8 @@
 miam(
 	'system/CroqueTrigger'
 	[
+		'jquery'
 		'system/Utils'
-		'system/ExceptionHandler'
 	]
 	() =>
 		###
@@ -25,13 +25,7 @@ miam(
 					throw new Error 'Specified event is not supported'
 
 				trigger = Utils.capitalize(trigger)
-				try
-					f = $(element).attr('data-on' + trigger)
-					return f
-				catch error
-					Log.w 'An error has occured when trying fixing triggers'
-					ExceptionHandler.handle error
-				return null
+				return $(element).attr('data-on' + trigger)
 
 			@bindTriggers: (events) ->
 				for e in events
@@ -44,7 +38,7 @@ miam(
 								eval 'window.Croque.getMainClass().' + method + '(element, event)'
 							catch error
 								Log.w 'An error has occurend when trying applying method'
-								ExceptionHandler.handle error
+								console.error error
 
 			###
 			 # Sets mouse listeners
@@ -101,7 +95,7 @@ miam(
 							eval 'window.Croque.getMainClass().' + method + '(element)'
 						catch error
 							Log.w 'An error has occurend when trying applying method'
-							ExceptionHandler.handle error
+							console.error error
 
 				for e in events
 					$('*[data-on' + Utils.capitalize(e)).each (index, element) =>

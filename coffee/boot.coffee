@@ -71,9 +71,7 @@ require(
                 for key, value of CROQUECONFIG.extras
                     @requireConfig[key] = value
 
-                require.config(
-                    @requireConfig
-                )
+                require.config @requireConfig
 
                 # Launch main class' requirement
                 require(

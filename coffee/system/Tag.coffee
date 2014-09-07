@@ -1,6 +1,7 @@
 miam(
 	'system/Tag'
 	[
+		'jquery'
 		'system/Utils'
 	]
 	() =>
@@ -11,21 +12,66 @@ miam(
 		class Tag
 			###
 			 # Build a new tag. Given element could wrap classes and id.
-			 # For instance, a#link.myClass.anotherOne will create a A
-			 # tag with link as id and myClass and anotherOne as classes
+			 # For instance, a#link.myClass.anotherOne will create a <a>
+			 # tag with "link" as id and "myClass" and "anotherOne" as
+			 # classes
 			 # @param tag{String}
 			 ###
 			constructor: (tag) ->
-				a = Utils.explode '.', tag
-				pre = Utils.explode '#', a[0]
+				if not tag?
+					throw new Error 'Expected a tag'
 
-				@tag = $('<' + pre[0] + '></' + pre[0] + '>')
+				i = 0
+				firstClassMatching = true
+				current = tag[i]
+				buffer = ''
+				while i < tag.length and current isnt '#'
+					if current is '.'
+						if firstClassMatching
+							firstClassMatching = false
+							@tag = $('<' + buffer + '>')
+						else
+							@addClass buffer
+						buffer = ''
+					else
+						buffer += current
+					i++
+					if i isnt tag.length then current = tag[i]
 
-				if pre.length > 1
-					@setId pre[1]
-				
-				for i in [1..a.length - 1]
-					@addClass a[i]
+				if i is tag.length 
+					if firstClassMatching
+						@tag = $('<' + buffer + '>')
+						return
+					else
+						@addClass buffer
+						return
+
+				@tag = $('<' + buffer + '>')
+				buffer = ''
+				i++
+				current = tag[i]
+				while i < tag.length and current isnt '.'
+					buffer += current
+					i++
+					if i isnt tag.length then current = tag[i]
+
+				@setId buffer
+				if i is tag.length
+					return
+
+				i++
+				buffer = ''
+				current = tag[i]
+				while i < tag.length
+					if current is '.'
+						@addClass buffer
+						buffer = ''
+					else
+						buffer += current
+					i++
+					if i isnt tag.length then current = tag[i]
+
+				@addClass buffer
 
 			###
 			 # Add class to current tag

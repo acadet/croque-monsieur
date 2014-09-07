@@ -19,7 +19,7 @@ class Environment
 		else document.documentElement.clientHeight
 
 	###
-	 # Informs if used device is touchable
+	 # Informs if used device is a mobile one
 	 ###
-	@isTouchable: () ->
+	@isMobile: () ->
 		(/Android|webOS|iPhone|Windows Phone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))

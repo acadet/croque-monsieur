@@ -19,7 +19,6 @@ CROQUECONFIG =
 		'modernizr'
 		'system/default/Environment'
 		'system/default/Log'
-		'system/default/Interface'
 	]
 	
 	

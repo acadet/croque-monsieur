@@ -9,7 +9,7 @@ miam(
 		class Utils
 
 			###
-			 # Join pieces of an array using glue
+			 # Joins pieces of an array using glue
 			 # @param glue{String}
 			 # @param pieces{Array}
 			 # @return Joined array as a string
@@ -58,16 +58,23 @@ miam(
 			 # @param obj2 Object to append
 			 ###
 			@concatJSON: (obj1, obj2) ->
+				if not obj1?
+					throw new Error 'Destination is null'
+				if not obj2?
+					Log.w 'Object to append is null'
+					return
+
 				for key, value of obj2
 					obj1[key] = value
-
-				obj1
 
 			###
 			 # Capitalizes first letter of string
 			 # @param string
 			 ###
 			@capitalize: (string) ->
+				if not string?
+					Log.w 'Provided string is null'
+					return null
 				if string.length < 1
 					throw new Error 'Unable to capitalize: string is too short'
 
