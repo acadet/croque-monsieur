@@ -7,7 +7,7 @@ miam(
 	() =>
 		###
 		 # @class CroqueTrigger
-		 # @brief Sets trigger to specified HTML elements. See official doc for more details
+		 # @brief Sets triggers to specified HTML elements. See official doc for more details
 		 # @description
 		 # Specify events on your HTML elements and bind js callbacks to them.
 		 # The trigger will automatically generate JS listeners.

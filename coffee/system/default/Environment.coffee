@@ -3,6 +3,15 @@
  # @brief Environment management. Provides details about window or used device
  ###
 class Environment
+	#region Constructors
+	
+	#endregion Constructors
+	
+	#region Private
+	
+	#endregion Private
+	
+	#region Public
 
 	###
 	 # Returns width of window
@@ -23,3 +32,5 @@ class Environment
 	 ###
 	@isMobile: () ->
 		(/Android|webOS|iPhone|Windows Phone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
+	
+	#endregion Public

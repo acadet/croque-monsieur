@@ -23,6 +23,7 @@ miam(
 				# Assert
 				Assert.isNotNull cookie
 				Assert.areEqual 'bar', Cookie.getValue('foobar')
+				cookie.remove()
 
 			cookieConstructorNoKeyTest: () ->
 				# Arrange
@@ -31,6 +32,18 @@ miam(
 				Assert.fail () => cookie = new Cookie
 				
 				# Assert
+
+			cookieConstructorAutoValueTest: () ->
+				# Arrange
+				origin = new Cookie 'barbar', 'foo'
+				
+				# Act
+				cookie = new Cookie 'barbar'
+				
+				# Assert
+				Assert.isNotNull cookie
+				Assert.areEqual 'foo', cookie.getValue()
+				cookie.remove()
 
 			cookieValueTest: () ->
 				# Arrange

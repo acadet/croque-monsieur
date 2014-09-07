@@ -7,6 +7,15 @@ miam(
 		 # @brief Wraps global useful methods
 		 ###
 		class Utils
+			#region Constructors
+			
+			#endregion Constructors
+			
+			#region Private
+			
+			#endregion Private
+			
+			#region Public
 
 			###
 			 # Joins pieces of an array using glue
@@ -79,5 +88,6 @@ miam(
 					throw new Error 'Unable to capitalize: string is too short'
 
 				string.substr(0, 1).toUpperCase() + string.slice(1)
-
+			
+			#endregion Public
 )

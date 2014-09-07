@@ -7,27 +7,38 @@ miam(
 	() =>
 		###
 		 # @class Tag
-		 # @brief Help developer adding quickly a tag to page
+		 # @brief Makes appending a HTML tag to page easier
 		 ###
 		class Tag
+			#region Constructors
+
 			###
-			 # Build a new tag. Given element could wrap classes and id.
+			 # Builds a new tag. Given element could wrap classes and id.
 			 # For instance, a#link.myClass.anotherOne will create a <a>
 			 # tag with "link" as id and "myClass" and "anotherOne" as
-			 # classes
+			 # classes.
+			 # Id and classes are optional
 			 # @param tag{String}
 			 ###
 			constructor: (tag) ->
 				if not tag?
 					throw new Error 'Expected a tag'
 
+				# Following algorithm browse only once
+				# provided string
+
 				i = 0
 				firstClassMatching = true
 				current = tag[i]
 				buffer = ''
+				# First collect prefix until finding an id
 				while i < tag.length and current isnt '#'
 					if current is '.'
+						# A class was found. That means there is
+						# no id
 						if firstClassMatching
+							# First class matching.
+							# Needs to create tag base
 							firstClassMatching = false
 							@tag = $('<' + buffer + '>')
 						else
@@ -39,10 +50,13 @@ miam(
 					if i isnt tag.length then current = tag[i]
 
 				if i is tag.length 
+					# No id was found
 					if firstClassMatching
+						# Only a tag, no id and classes
 						@tag = $('<' + buffer + '>')
 						return
 					else
+						# Add pending class
 						@addClass buffer
 						return
 
@@ -50,20 +64,25 @@ miam(
 				buffer = ''
 				i++
 				current = tag[i]
+				# Id has been found, now seek for classes
 				while i < tag.length and current isnt '.'
 					buffer += current
 					i++
 					if i isnt tag.length then current = tag[i]
 
+				# First class encountered. Saves stored id
 				@setId buffer
 				if i is tag.length
+					# No classes, only an id
 					return
 
 				i++
 				buffer = ''
 				current = tag[i]
+				# Collect classes
 				while i < tag.length
 					if current is '.'
+						# New class, save previous one
 						@addClass buffer
 						buffer = ''
 					else
@@ -72,30 +91,40 @@ miam(
 					if i isnt tag.length then current = tag[i]
 
 				@addClass buffer
+			
+			#endregion Constructors
+			
+			#region Private
+			
+			#endregion Private
+			
+			#region Public
+			
+			#endregion Public
 
 			###
-			 # Add class to current tag
+			 # Adds class to current tag
 			 # @param c{String}
 			 ###
 			addClass: (c) ->
 				@tag.addClass c
 
 			###
-			 # Set id to current tag
+			 # Sets id to current tag
 			 # @param id{String}
 			 ###
 			setId: (id) ->
 				@tag.attr 'id', id
 
 			###
-			 # Set content to current tag
+			 # Sets content to current tag
 			 # @param c{String}
 			 ###
 			setContent: (c) ->
 				@tag.html c
 
 			###
-			 # Set attribute to current tag
+			 # Sets attribute to current tag
 			 # @param key{String}
 			 # @param value{String}
 			 ###
@@ -103,7 +132,7 @@ miam(
 				@tag.attr key, value
 
 			###
-			 # Set a data element
+			 # Sets a data element
 			 # @param key{String}
 			 # @param value{String}
 			 ###
@@ -111,13 +140,13 @@ miam(
 				@tag.attr 'data-' + key, value
 
 			###
-			 # Get current tag as a string (with full elements)
+			 # Gets current tag as a string (with full elements)
 			 ###
 			toString: () ->
 				@tag.prop 'outerHTML'
 
 			###
-			 # Append tag to given element. Using body by default
+			 # Appends tag to given element. Using body by default
 			 # @param e{String}
 			 ###
 			appendTo: (e) ->
@@ -125,49 +154,70 @@ miam(
 				$(e).append @tag
 
 			###
-			 # Centerize element horizontally. Use body by default
+			 # Centerizes element horizontally.
+			 # Wrapper is optional: uses body by default
 			 # @param $wrapper{jQuery Object}
 			 ###
 			horizontal: ($wrapper) ->
 				Tag.horizontal @tag, $wrapper
 
+			###
+			 # Centerizes provided element horizontally.
+			 # Wrapper is optional: uses body by default
+			 # @param $element{jQuery Object}
+			 # @param $wrapper{jQuery Object}
+			 ###
 			@horizontal: ($element, $wrapper) ->
 				if not $wrapper? then $wrapper = $('body')
 				$element.css
 					left : ($wrapper.outerWidth() - $element.outerWidth()) / 2
 
 			###
-			 # Centerize element vertically. Use body by default
+			 # Centerizes element vertically.
+			 # Wrapper is optional: uses body by default
 			 # @param $wrapper{jQuery Object}
 			 ###
 			vertical: ($wrapper) ->
 				Tag.vertical @tag, $wrapper
 
+			###
+			 # Centerizes provided element vertically.
+			 # Wrapper is optional: uses body by default
+			 # @param $element{jQuery Object}
+			 # @param $wrapper{jQuery Object}
+			 ###
 			@vertical: ($element, $wrapper) ->
 				if not $wrapper? then $wrapper = $('body')
 				$element.css
 					top : ($wrapper.outerHeight() - $element.outerHeight()) / 2
 
 			###
-			 # Centerize element. Use body by default
+			 # Centerizes element.
+			 # Wrapper is optional: uses body by default
 			 # @param $wrapper{jQuery Object}
 			 ###
 			centerize: ($wrapper) ->
 				@horizontal $wrapper
 				@vertical $wrapper
 
+			###
+			 # Centerizes provided element vertically.
+			 # Wrapper is optional: uses body by default
+			 # @param $element{jQuery Object}
+			 # @param $wrapper{jQuery Object}
+			 ###
 			@centerize: ($element, $wrapper) ->
 				Tag.horizontal $element, $wrapper
 				Tag.vertical $element, $wrapper
 
 			###
-			 # Cast tag to jquery object
+			 # Casts tag to jquery object
 			 ###
 			toJQuery: () ->
 				@tag
 
 			###
-			 # Cast tag to JS object
+			 # Casts tag to JS object
 			 ###
 			toJS: () ->
 				@tag.get()[0]
