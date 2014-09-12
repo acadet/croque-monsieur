@@ -1,1 +1,31 @@
-var _this=this,__hasProp={}.hasOwnProperty,__extends=function(t,e){function s(){this.constructor=t}for(var o in e)__hasProp.call(e,o)&&(t[o]=e[o]);return s.prototype=e.prototype,t.prototype=new s,t.__super__=e.prototype,t};miam("system/ajax/DeleteRequest",["system/ajax/AjaxRequest"],function(){var t;return t=function(t){function e(t){e.__super__.constructor.call(this,t),this.setType("DELETE"),this.setSuccess(function(t){return console.log("DELETE Request sucess!"),console.log(t)}),this.setError(function(t,e,s){return console.log("DELETE Request failed!"),console.log(s)})}return __extends(e,t),e}(AjaxRequest)});
+var __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+miam('system/ajax/DeleteRequest', ['system/ajax/AjaxRequest'], (function(_this) {
+  return function() {
+    var DeleteRequest;
+    return DeleteRequest = (function(_super) {
+      __extends(DeleteRequest, _super);
+
+      function DeleteRequest(url) {
+        DeleteRequest.__super__.constructor.call(this, url);
+        this.setType('DELETE');
+        this.setSuccess((function(_this) {
+          return function(data, status, xhr) {
+            console.log('DELETE Request sucess!');
+            return console.log(data);
+          };
+        })(this));
+        this.setError((function(_this) {
+          return function(xhr, status, error) {
+            console.log('DELETE Request failed!');
+            return console.log(error);
+          };
+        })(this));
+      }
+
+      return DeleteRequest;
+
+    })(AjaxRequest);
+  };
+})(this));

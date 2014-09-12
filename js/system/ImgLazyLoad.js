@@ -1,1 +1,96 @@
-var _this=this;miam("system/ImgLazyLoad",["system/Tag"],function(){var t;return t=function(){function t(){}return t.defaultClass="lazy-img",t.run=function(a){return null!=a&&(t.defaultClass=a),t.setImgsFromDiv(),$(window).resize(function(){return t.refreshSrcs()})},t.setImgsFromDiv=function(){var t=this;return $(document).find("div."+this.defaultClass).each(function(a,r){var e;return e=new Tag("img."+t.defaultClass),Environment.getWidth()<500?e.setAttr("src",$(r).attr("data-img-small")):Environment.getWidth()<1e3?e.setAttr("src",$(r).attr("data-img-medium")):e.setAttr("src",$(r).attr("data-img-large")),e.setAttr("alt",$(r).attr("data-img-alt")),e.setAttr("data-img-small",$(r).attr("data-img-small")),e.setAttr("data-img-medium",$(r).attr("data-img-medium")),e.setAttr("data-img-large",$(r).attr("data-img-large")),$(r).before(e.toString()),$(r).remove()})},t.changeOnly=function(t,a,r){return t.attr(a)!==r?t.attr(a,r):void 0},t.refreshSrcs=function(){return $(document).find("img."+this.defaultClass).each(function(a,r){return Environment.getWidth()<500?t.changeOnly($(r),"src",$(r).attr("data-img-small")):Environment.getWidth()<1e3?t.changeOnly($(r),"src",$(r).attr("data-img-medium")):t.changeOnly($(r),"src",$(r).attr("data-img-large"))})},t}()});
+miam('system/ImgLazyLoad', ['system/Tag'], (function(_this) {
+  return function() {
+
+    /*
+    		  * @defaultClass ImgLazyLoad
+    		  * @brief Provides a lazy load for imgs. Applies only for images matching given class
+    		  * @description
+    		  * Class is given when lauching. Breakpoints are 500 and 1000 (3 zones)
+    		  * Developer must define divs with given class and srcs of imgs. 
+    		  * They will be automatically replaced
+     */
+    var ImgLazyLoad;
+    return ImgLazyLoad = (function() {
+      function ImgLazyLoad() {}
+
+      ImgLazyLoad.defaultClass = 'lazy-img';
+
+
+      /*
+      			  * Runs img lazy loader
+       */
+
+      ImgLazyLoad.run = function(customClass) {
+        if (customClass != null) {
+          ImgLazyLoad.defaultClass = customClass;
+        }
+        ImgLazyLoad.setImgsFromDiv();
+        return $(window).resize((function(_this) {
+          return function() {
+            return ImgLazyLoad.refreshSrcs();
+          };
+        })(this));
+      };
+
+
+      /*
+      			  * Called only once. Replace divs by imgs
+       */
+
+      ImgLazyLoad.setImgsFromDiv = function() {
+        return $(document).find('div.' + this.defaultClass).each((function(_this) {
+          return function(i, e) {
+            var t;
+            t = new Tag('img.' + _this.defaultClass);
+            if (Environment.getWidth() < 500) {
+              t.setAttr('src', $(e).attr('data-img-small'));
+            } else if (Environment.getWidth() < 1000) {
+              t.setAttr('src', $(e).attr('data-img-medium'));
+            } else {
+              t.setAttr('src', $(e).attr('data-img-large'));
+            }
+            t.setAttr('alt', $(e).attr('data-img-alt'));
+            t.setAttr('data-img-small', $(e).attr('data-img-small'));
+            t.setAttr('data-img-medium', $(e).attr('data-img-medium'));
+            t.setAttr('data-img-large', $(e).attr('data-img-large'));
+            $(e).before(t.toString());
+            return $(e).remove();
+          };
+        })(this));
+      };
+
+
+      /*
+      			  * Changes atrribute only if value is different than existing
+       */
+
+      ImgLazyLoad.changeOnly = function($o, key, value) {
+        if ($o.attr(key) !== value) {
+          return $o.attr(key, value);
+        }
+      };
+
+
+      /*
+      			  * Refreshes srcs on window resizing
+       */
+
+      ImgLazyLoad.refreshSrcs = function() {
+        return $(document).find('img.' + this.defaultClass).each((function(_this) {
+          return function(i, e) {
+            if (Environment.getWidth() < 500) {
+              return ImgLazyLoad.changeOnly($(e), 'src', $(e).attr('data-img-small'));
+            } else if (Environment.getWidth() < 1000) {
+              return ImgLazyLoad.changeOnly($(e), 'src', $(e).attr('data-img-medium'));
+            } else {
+              return ImgLazyLoad.changeOnly($(e), 'src', $(e).attr('data-img-large'));
+            }
+          };
+        })(this));
+      };
+
+      return ImgLazyLoad;
+
+    })();
+  };
+})(this));

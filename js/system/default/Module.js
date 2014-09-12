@@ -1,1 +1,32 @@
-var Module;Module=function(){function t(t,e){this.name=t,this.declaration=e}return t.prototype.getName=function(){return this.name},t.prototype.setName=function(t){return this.name=t},t.prototype.getDeclaration=function(){return this.declaration},t.prototype.setDeclaration=function(t){return this.declaration=t},t}();
+
+/*
+  * @class Module
+  * @brief Used struct to manage dependencies
+ */
+var Module;
+
+Module = (function() {
+  function Module(name, declaration) {
+    this.name = name;
+    this.declaration = declaration;
+  }
+
+  Module.prototype.getName = function() {
+    return this.name;
+  };
+
+  Module.prototype.setName = function(n) {
+    return this.name = n;
+  };
+
+  Module.prototype.getDeclaration = function() {
+    return this.declaration;
+  };
+
+  Module.prototype.setDeclaration = function(f) {
+    return this.declaration = f;
+  };
+
+  return Module;
+
+})();

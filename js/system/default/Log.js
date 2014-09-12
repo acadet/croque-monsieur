@@ -1,1 +1,57 @@
-var Log;Log=function(){function o(){}return o.level=3,o.d=function(e){return o.level>=3?console.log("[CM DEBUG] "+e):void 0},o.i=function(e){return o.level>=2?console.log("%c[CM INFO] "+e,"color : blue"):void 0},o.w=function(e){return o.level>=1?(console.log("%c[CM WARNING] "+e,"color : red"),console.trace()):void 0},o}();
+
+/*
+  * @class Log
+  * @brief A log system
+ */
+var Log;
+
+Log = (function() {
+
+  /*
+  	  * Level of log
+  	  * 0: no log
+  	  * 1: only errors
+  	  * 2: errors + info
+  	  * 3: all details
+   */
+  function Log() {}
+
+  Log.level = 3;
+
+
+  /*
+  	  * Prints a debug msg
+   */
+
+  Log.d = function(m) {
+    if (Log.level >= 3) {
+      return console.log('[CM DEBUG] ' + m);
+    }
+  };
+
+
+  /*
+  	  * Prints a info msg
+   */
+
+  Log.i = function(m) {
+    if (Log.level >= 2) {
+      return console.log('%c[CM INFO] ' + m, 'color : blue');
+    }
+  };
+
+
+  /*
+  	  * Prints a warning msg
+   */
+
+  Log.w = function(m) {
+    if (Log.level >= 1) {
+      console.log('%c[CM WARNING] ' + m, 'color : red');
+      return console.trace();
+    }
+  };
+
+  return Log;
+
+})();

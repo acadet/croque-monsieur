@@ -1,34 +1,33 @@
+
 /*
- # @file boot.coffee
- # @author Adrien Cadet <acadet@live.fr>
- # @brief Wraps initialization of Croque Monsieur
-*/
+  * @file boot.coffee
+  * @author Adrien Cadet <acadet@live.fr>
+  * @brief Wraps initialization of Croque Monsieur
+ */
+var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-
-(function() {
-  var _this = this,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-  (function() {
+((function(_this) {
+  return function() {
     if (typeof JSFOLDER === "undefined" || JSFOLDER === null) {
       throw new Error('You must set JSFOLDER var');
     }
     if (typeof CROQUECLASS === "undefined" || CROQUECLASS === null) {
       throw new Error('You must set CROQUECLASS var');
     }
-  })();
+  };
+})(this))();
 
-  require([JSFOLDER + 'system/default/Module', JSFOLDER + 'system/default/Vertice', JSFOLDER + 'system/default/OrientedGraph', JSFOLDER + 'config'], function() {
+require([JSFOLDER + 'system/default/Module', JSFOLDER + 'system/default/Vertice', JSFOLDER + 'system/default/OrientedGraph', JSFOLDER + 'config'], (function(_this) {
+  return function() {
+
     /*
-     # @class Croque
-     # @brief Loads needed class and all its dependencies. Sets default config
-    */
-
+      * @class Croque
+      * @brief Loads needed class and all its dependencies. Sets default config
+     */
     var Croque;
     Croque = (function() {
       function Croque(folder, c) {
-        var key, value, _ref, _ref1, _ref2,
-          _this = this;
+        var key, value, _ref, _ref1, _ref2;
         this.folder = folder;
         this.classPath = c;
         this.className = this.extractClass(c);
@@ -76,45 +75,48 @@
           this.requireConfig[key] = value;
         }
         require.config(this.requireConfig);
-        require(CROQUECONFIG["default"], function() {
-          return require([_this.classPath], function() {
-            return _this.whenReady(function() {
-              var browser, e;
-              browser = function(v) {
-                var m;
-                if (v.isWhite()) {
-                  v.setGrey();
-                  _this.graph.mapNeighborhood(v, browser);
-                  v.setBlack();
-                  m = v.getContent();
-                  return window[m.getName()] = (m.getDeclaration())();
+        require(CROQUECONFIG["default"], (function(_this) {
+          return function() {
+            return require([_this.classPath], function() {
+              return _this.whenReady(function() {
+                var browser, e;
+                browser = function(v) {
+                  var m;
+                  if (v.isWhite()) {
+                    v.setGrey();
+                    _this.graph.mapNeighborhood(v, browser);
+                    v.setBlack();
+                    m = v.getContent();
+                    return window[m.getName()] = (m.getDeclaration())();
+                  }
+                };
+                browser(_this.rootVertice);
+                try {
+                  return _this.mainClass = eval("new " + _this.className + "()");
+                } catch (_error) {
+                  e = _error;
+                  Log.w("CroqueMonsieur: error when constructing main class: " + e.message);
+                  return Log.w(e.stack);
                 }
-              };
-              browser(_this.rootVertice);
-              try {
-                return _this.mainClass = eval("new " + _this.className + "()");
-              } catch (_error) {
-                e = _error;
-                Log.w("CroqueMonsieur: error when constructing main class: " + e.message);
-                return Log.w(e.stack);
-              }
+              });
             });
-          });
-        });
+          };
+        })(this));
       }
 
-      /*
-       # Avoid console errors in browsers that lack a console.
-       # Replace each function by an empty one
-      */
 
+      /*
+        * Avoid console errors in browsers that lack a console.
+        * Replace each function by an empty one
+       */
 
       Croque.prototype.fixConsole = function() {
-        var console, length, method, methods, noop,
-          _this = this;
-        noop = function() {
-          return {};
-        };
+        var console, length, method, methods, noop;
+        noop = (function(_this) {
+          return function() {
+            return {};
+          };
+        })(this);
         methods = ['assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error', 'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log', 'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd', 'timeStamp', 'trace', 'warn'];
         length = methods.length;
         console = window.console === window.console || {};
@@ -127,19 +129,19 @@
         return true;
       };
 
-      /*
-       # Gets current main class
-      */
 
+      /*
+        * Gets current main class
+       */
 
       Croque.prototype.getMainClass = function() {
         return this.mainClass;
       };
 
-      /*
-       # Extracts class from given path
-      */
 
+      /*
+        * Extracts class from given path
+       */
 
       Croque.prototype.extractClass = function(s) {
         var c, i, tmp, _i, _ref;
@@ -163,17 +165,16 @@
         return c;
       };
 
-      /*
-       # VI Function. Used to define each module of the app
-       # @param name{String} Name of module
-       # @param deps{Array} Array of dependencies' name
-       # @param declaration{Function} Declaration of class
-      */
 
+      /*
+        * VI Function. Used to define each module of the app
+        * @param name{String} Name of module
+        * @param deps{Array} Array of dependencies' name
+        * @param declaration{Function} Declaration of class
+       */
 
       Croque.prototype.miam = function(name, deps, declaration) {
-        var d, root, s, v, _i, _len, _results,
-          _this = this;
+        var d, root, s, v, _i, _len, _results;
         if (name == null) {
           throw new Error('Your module needs a name');
         }
@@ -202,9 +203,11 @@
               v = new Vertice(new Module(this.extractClass(d)));
               this.total++;
               this.graph.addVertice(v);
-              require([d], function() {
-                return _this.loaded++;
-              });
+              require([d], (function(_this) {
+                return function() {
+                  return _this.loaded++;
+                };
+              })(this));
             }
             _results.push(this.graph.bindVertices(root, v));
           }
@@ -212,20 +215,21 @@
         return _results;
       };
 
-      /*
-       # Executes a function when init is done
-       # (deps are all loaded)
-      */
 
+      /*
+        * Executes a function when init is done
+        * (deps are all loaded)
+       */
 
       Croque.prototype.whenReady = function(f) {
-        var _this = this;
         if (this.loaded >= this.total) {
           return f();
         } else {
-          return setTimeout(function() {
-            return _this.whenReady(f);
-          }, 250);
+          return setTimeout((function(_this) {
+            return function() {
+              return _this.whenReady(f);
+            };
+          })(this), 250);
         }
       };
 
@@ -236,6 +240,5 @@
     return window.miam = function(name, deps, declaration) {
       return window.Croque.miam(name, deps, declaration);
     };
-  });
-
-}).call(this);
+  };
+})(this));
