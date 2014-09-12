@@ -3,5 +3,5 @@
 .DS_Store
 
 # Avoid compiled filed except vendor folder
-js/**/*
+js/**/*.js
 !js/vendor/*.js
