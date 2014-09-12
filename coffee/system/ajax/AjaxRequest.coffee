@@ -1,7 +1,13 @@
 miam(
 	'system/ajax/AjaxRequest'
-	[]
+	[
+		'jquery'
+	]
 	() =>
+		###
+		 # @class AjaxRequest
+		 # @brief A simple ajax request
+		 ###
 		class AjaxRequest
 			#region Constructors
 			
@@ -24,40 +30,44 @@ miam(
 			
 			#region Public
 
-			getType: () ->
-				@type
-
+			###
+			 # Sets type of request (POST, GET etc.)
+			 ###
 			setType: (type) ->
 				@type = type
 
-			getData: () ->
-				@data
-
+			###
+			 # Sets optional data to send
+			 ###
 			setData: (data) ->
 				@data = data
 
-			getDataType: () ->
-				@dataType
-
+			###
+			 # Sets type of received data
+			 ###
 			setDataType: (type) ->
 				@dataType = type
 
-			getSuccess: () ->
-				@success
-
+			###
+			 # Sets success callback
+			 ###
 			setSuccess: (f) ->
 				@success = f
 
-			getError: () ->
-				@error
-
+			###
+			 # Sets error callback
+			 ###
 			setError: (f) ->
 				@error = f
 
+			###
+			 # Runs request
+			 ###
 			execute: () ->
 				$.ajax(
 					type : @type
 					url : @url
+					data: @data
 					dataType : @dataType
 					success : @success
 					error : @error

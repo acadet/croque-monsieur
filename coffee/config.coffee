@@ -1,6 +1,5 @@
 ###
  # @file config.coffee
- # @author Adrien Cadet <acadet@live.fr>
  # @brief This file wraps config of CM. More details on official website
  ###
 

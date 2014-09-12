@@ -31,7 +31,7 @@ miam(
 				firstClassMatching = true
 				current = tag[i]
 				buffer = ''
-				# First collect prefix until finding an id
+				# First, collect prefix until finding an id
 				while i < tag.length and current isnt '#'
 					if current is '.'
 						# A class was found. That means there is

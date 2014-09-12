@@ -30,7 +30,7 @@ class Log
 			console.log '[CM DEBUG] ' + m
 
 	###
-	 # Prints a info msg
+	 # Prints an info msg
 	 ###
 	@i: (m) ->
 		if Log.level >= 2

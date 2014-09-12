@@ -62,6 +62,16 @@ miam(
 					a
 
 			###
+			 # Shuffles an array
+			 ###
+			@shuffleArray: (a) ->
+				for value, index in a
+					i = parseInt(Math.round(Math.random() * (a.length - 1)))
+					tmp = a[i]
+					a[i] = value
+					a[index] = tmp
+
+			###
 			 # Concats 2 JSON objects
 			 # @param obj1 Destination
 			 # @param obj2 Object to append

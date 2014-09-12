@@ -1,6 +1,7 @@
 miam(
 	'tests/TestCroqueTrigger'
 	[
+		'quoJS'
 		'system/CroqueTrigger'
 	]
 	() =>
@@ -16,9 +17,4 @@ miam(
 
 			keyPress: (e, event) ->
 				Log.i event.which
-
-			hold: (e) ->
-				Log.i "Hold"
-
-
 )

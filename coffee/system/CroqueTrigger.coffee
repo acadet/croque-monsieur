@@ -13,6 +13,11 @@ miam(
 		 # The trigger will automatically generate JS listeners.
 		 ###
 		class CroqueTrigger
+			#region Constructors
+			
+			#endregion Constructors
+			
+			#region Private
 
 			###
 			 # From specified event and HTML element, returns
@@ -20,30 +25,29 @@ miam(
 			 # @param trigger Event
 			 # @param element JS object
 			 ###
-			@getMethod: (trigger, element) ->
+			@_getMethod: (trigger, element) ->
 				if trigger.length < 2
 					throw new Error 'Specified event is not supported'
 
-				trigger = Utils.capitalize(trigger)
-				return $(element).attr('data-on' + trigger)
+				return $(element).attr('data-on' + Utils.capitalize(trigger))
 
-			@bindTriggers: (events) ->
+			@_bindTriggers: (events) ->
 				for e in events
 					$('*[data-on' + Utils.capitalize(e)).each (index, element) =>
-						method = CroqueTrigger.getMethod e, element
+						method = CroqueTrigger._getMethod e, element
 						if not method? then return
 						
 						$(element).on e.toLowerCase(), (event) =>
 							try
 								eval 'window.Croque.getMainClass().' + method + '(element, event)'
 							catch error
-								Log.w 'An error has occurend when trying applying method'
+								Log.w 'An error has occurend when trying to apply method'
 								console.error error
 
 			###
 			 # Sets mouse listeners
 			 ###
-			@setMouseEvents: () ->
+			@_setMouseEvents: () ->
 				events = [
 					'click'
 					'dbClick'
@@ -56,62 +60,30 @@ miam(
 					'mouseDown'
 				]
 
-				CroqueTrigger.bindTriggers events
-
+				CroqueTrigger._bindTriggers events
 				
 			###
 			 # Sets keyboard listeners
 			 ###
-			@setKeyboardEvents: () ->
+			@_setKeyboardEvents: () ->
 				events = [
 					'keyPress'
 					'keyDown'
 					'keyUp'
 				]
 
-				CroqueTrigger.bindTriggers events
-
-			###
-			 # Sets touch listeners
-			 ###
-			@setTouchEvents: () ->
-				events = [
-					'singleTap'
-					'doubleTap'
-					'hold'
-					'swipeUp'
-					'swipeDown'
-					'swipeLeft'
-					'swipeRight'
-				]
-
-				quoJS = false
-				f = (e, element) =>
-					method = CroqueTrigger.getMethod e, element
-					if not method? then return
-					
-					$$(element).on e, () =>
-						try
-							eval 'window.Croque.getMainClass().' + method + '(element)'
-						catch error
-							Log.w 'An error has occurend when trying applying method'
-							console.error error
-
-				for e in events
-					$('*[data-on' + Utils.capitalize(e)).each (index, element) =>
-						s = e
-						if quoJS
-							f(s, element)
-						else
-							require ['quoJS'], () =>
-								quoJS = true
-								f(s, element)
+				CroqueTrigger._bindTriggers events
+			
+			#endregion Private
+			
+			#region Public
 
 			###
 			 # Runs croqueTrigger
 			 ###
 			@run: () ->
-				CroqueTrigger.setMouseEvents()
-				CroqueTrigger.setKeyboardEvents()
-				CroqueTrigger.setTouchEvents()
+				CroqueTrigger._setMouseEvents()
+				CroqueTrigger._setKeyboardEvents()
+			
+			#endregion Public
 )

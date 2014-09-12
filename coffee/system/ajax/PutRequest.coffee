@@ -4,6 +4,10 @@ miam(
 		'system/ajax/AjaxRequest'
 	]
 	() =>
+		###
+		 # @class PutRequest
+		 # @brief A PUT request
+		 ###
 		class PutRequest extends AjaxRequest
 			constructor: (url) ->
 				super url

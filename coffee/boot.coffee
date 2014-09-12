@@ -1,6 +1,5 @@
 ###
  # @file boot.coffee
- # @author Adrien Cadet <acadet@live.fr>
  # @brief Wraps initialization of Croque Monsieur
  ###
 
@@ -42,6 +41,7 @@ require(
                 # Start hydrating config of requireJS using specified user config
                 @requireConfig =
                     baseUrl: @folder
+                    paths: {}
                 
                 # Enable/Disable caching
                 if not CROQUECONFIG.cache
@@ -49,16 +49,7 @@ require(
 
                 # Gathering libs
                 for key, value of CROQUECONFIG.libs
-                    # Disable specified libs for IE
-                    if key in CROQUECONFIG.IESupport
-                        if /MSIE (\d+\.\d+);/.test(navigator.userAgent)
-                            define key, []
-                        else
-                            define key, [value]
-                    else
-                        if not @requireConfig.paths?
-                            @requireConfig.paths = {}
-                        @requireConfig.paths[key] = value
+                    @requireConfig.paths[key] = value
 
                 # Setting exports
                 for key, value of CROQUECONFIG.exports
@@ -86,17 +77,17 @@ require(
                                     # And add to global environment
                                     
                                     # Browses Graph with a deep method
-                                    browser = (v) =>
+                                    browse = (v) =>
                                         if v.isWhite()
                                             v.setGrey()
                                             
-                                            @graph.mapNeighborhood v, browser
+                                            @graph.mapNeighborhood v, browse
                                             
                                             v.setBlack()
                                             m = v.getContent()
                                             window[m.getName()] = (m.getDeclaration())()
 
-                                    browser(@rootVertice)
+                                    browse(@rootVertice)
 
                                     try
                                         @mainClass = eval "new " + @className + "()"
@@ -107,7 +98,7 @@ require(
                 )
 
             ###
-             # Avoid console errors in browsers that lack a console.
+             # Avoids console errors in browsers that lack a console.
              # Replace each function by an empty one
              ###
             fixConsole: () ->
@@ -194,14 +185,22 @@ require(
 
                 # Load dependencies
                 for d in deps
-                    if @requireConfig.paths[d]? or d is 'quoJS'
-                        require [d]
+                    if @requireConfig.paths[d]? and d in CROQUECONFIG.IESupport and /MSIE/.test(navigator.userAgent)
+                        # Do nothing
+                        # Lib is not supported, do not load it
                     else
-                        v = @graph.find(@extractClass(d))
+                        if @requireConfig.paths[d]?
+                            v = @graph.find(d)
+                        else
+                            v = @graph.find(@extractClass(d))
 
                         # First time encountering a dep
                         if not v?
-                            v = new Vertice(new Module(@extractClass(d)))
+                            if @requireConfig.paths[d]?
+                                v = new Vertice(new Module(d))
+                                v.setBlack()
+                            else
+                                v = new Vertice(new Module(@extractClass(d)))
                             @total++
                             @graph.addVertice v
                             require [d], () =>
@@ -216,13 +215,13 @@ require(
              # (deps are all loaded)
              ###
             whenReady: (f) ->
-                if @loaded >= @total
+                if @loaded is @total
                     f()
                 else
                     setTimeout(
                         () =>
                             @whenReady f
-                        250
+                        100
                     )
 
         # Bind to global environement
