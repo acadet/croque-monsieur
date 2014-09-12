@@ -1,3 +1,7 @@
 #TMP Files
 *~
 .DS_Store
+
+# Avoid compiled filed except vendor folder
+js/**/*
+!js/vendor/*.js

@@ -1,13 +1,12 @@
 miam(
 	'tests/TestCroqueTrigger'
 	[
+		'quoJS'
 		'system/CroqueTrigger'
-		'system/TestUnit'
 	]
 	() =>
-		class TestCroqueTrigger extends TestUnit
+		class TestCroqueTrigger
 			constructor: () ->
-				super TestUnit.outputs.HTML
 				CroqueTrigger.run()
 
 			click: (e) ->
@@ -18,9 +17,4 @@ miam(
 
 			keyPress: (e, event) ->
 				Log.i event.which
-
-			hold: (e) ->
-				Log.i "Hold"
-
-
 )

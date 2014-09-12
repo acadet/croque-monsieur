@@ -3,8 +3,8 @@
   * @class OrientedGraph
   * @brief An orientend graph
   * @description
-  * To perform dependencies management, croque is using a graph.
-  * Each vertice is a module to load and edges represents deps.
+  * To perform dependencies management, Croque is using a graph.
+  * Each vertice is a module to load and edges represent deps.
   * Croque will load firstly vertices without neighbors
  */
 var OrientedGraph;

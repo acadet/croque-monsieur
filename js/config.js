@@ -1,7 +1,6 @@
 
 /*
   * @file config.coffee
-  * @author Adrien Cadet <acadet@live.fr>
   * @brief This file wraps config of CM. More details on official website
  */
 var CROQUECONFIG;
@@ -16,7 +15,7 @@ CROQUECONFIG = {
   /*
   	  * Default files/libs to load
    */
-  "default": ['jquery', 'modernizr', 'system/default/Environment', 'system/default/Log', 'system/default/Interface'],
+  "default": ['jquery', 'modernizr', 'system/default/Environment', 'system/default/Log'],
 
   /*
   	  * Exports global vars from specified files

@@ -1,35 +1,92 @@
-miam('system/Tag', ['system/Utils'], (function(_this) {
+miam('system/Tag', ['jquery', 'system/Utils'], (function(_this) {
   return function() {
 
     /*
     		  * @class Tag
-    		  * @brief Help developer adding quickly a tag to page
+    		  * @brief Makes appending a HTML tag to page easier
      */
     var Tag;
     return Tag = (function() {
 
       /*
-      			  * Build a new tag. Given element could wrap classes and id.
-      			  * For instance, a#link.myClass.anotherOne will create a A
-      			  * tag with link as id and myClass and anotherOne as classes
+      			  * Builds a new tag. Given element could wrap classes and id.
+      			  * For instance, a#link.myClass.anotherOne will create a <a>
+      			  * tag with "link" as id and "myClass" and "anotherOne" as
+      			  * classes.
+      			  * Id and classes are optional
       			  * @param tag{String}
        */
       function Tag(tag) {
-        var a, i, pre, _i, _ref;
-        a = Utils.explode('.', tag);
-        pre = Utils.explode('#', a[0]);
-        this.tag = $('<' + pre[0] + '></' + pre[0] + '>');
-        if (pre.length > 1) {
-          this.setId(pre[1]);
+        var buffer, current, firstClassMatching, i;
+        if (tag == null) {
+          throw new Error('Expected a tag');
         }
-        for (i = _i = 1, _ref = a.length - 1; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
-          this.addClass(a[i]);
+        i = 0;
+        firstClassMatching = true;
+        current = tag[i];
+        buffer = '';
+        while (i < tag.length && current !== '#') {
+          if (current === '.') {
+            if (firstClassMatching) {
+              firstClassMatching = false;
+              this.tag = $('<' + buffer + '>');
+            } else {
+              this.addClass(buffer);
+            }
+            buffer = '';
+          } else {
+            buffer += current;
+          }
+          i++;
+          if (i !== tag.length) {
+            current = tag[i];
+          }
         }
+        if (i === tag.length) {
+          if (firstClassMatching) {
+            this.tag = $('<' + buffer + '>');
+            return;
+          } else {
+            this.addClass(buffer);
+            return;
+          }
+        }
+        this.tag = $('<' + buffer + '>');
+        buffer = '';
+        i++;
+        current = tag[i];
+        while (i < tag.length && current !== '.') {
+          buffer += current;
+          i++;
+          if (i !== tag.length) {
+            current = tag[i];
+          }
+        }
+        this.setId(buffer);
+        if (i === tag.length) {
+          return;
+        }
+        i++;
+        buffer = '';
+        current = tag[i];
+        while (i < tag.length) {
+          if (current === '.') {
+            this.addClass(buffer);
+            buffer = '';
+          } else {
+            buffer += current;
+          }
+          i++;
+          if (i !== tag.length) {
+            current = tag[i];
+          }
+        }
+        this.addClass(buffer);
       }
 
 
       /*
-      			  * Add class to current tag
+      			  * Adds class to current tag
       			  * @param c{String}
        */
 
@@ -39,7 +96,7 @@ miam('system/Tag', ['system/Utils'], (function(_this) {
 
 
       /*
-      			  * Set id to current tag
+      			  * Sets id to current tag
       			  * @param id{String}
        */
 
@@ -49,7 +106,7 @@ miam('system/Tag', ['system/Utils'], (function(_this) {
 
 
       /*
-      			  * Set content to current tag
+      			  * Sets content to current tag
       			  * @param c{String}
        */
 
@@ -59,7 +116,7 @@ miam('system/Tag', ['system/Utils'], (function(_this) {
 
 
       /*
-      			  * Set attribute to current tag
+      			  * Sets attribute to current tag
       			  * @param key{String}
       			  * @param value{String}
        */
@@ -70,7 +127,7 @@ miam('system/Tag', ['system/Utils'], (function(_this) {
 
 
       /*
-      			  * Set a data element
+      			  * Sets a data element
       			  * @param key{String}
       			  * @param value{String}
        */
@@ -81,7 +138,7 @@ miam('system/Tag', ['system/Utils'], (function(_this) {
 
 
       /*
-      			  * Get current tag as a string (with full elements)
+      			  * Gets current tag as a string (with full elements)
        */
 
       Tag.prototype.toString = function() {
@@ -90,7 +147,7 @@ miam('system/Tag', ['system/Utils'], (function(_this) {
 
 
       /*
-      			  * Append tag to given element. Using body by default
+      			  * Appends tag to given element. Using body by default
       			  * @param e{String}
        */
 
@@ -103,13 +160,22 @@ miam('system/Tag', ['system/Utils'], (function(_this) {
 
 
       /*
-      			  * Centerize element horizontally. Use body by default
+      			  * Centerizes element horizontally.
+      			  * Wrapper is optional: uses body by default
       			  * @param $wrapper{jQuery Object}
        */
 
       Tag.prototype.horizontal = function($wrapper) {
         return Tag.horizontal(this.tag, $wrapper);
       };
+
+
+      /*
+      			  * Centerizes provided element horizontally.
+      			  * Wrapper is optional: uses body by default
+      			  * @param $element{jQuery Object}
+      			  * @param $wrapper{jQuery Object}
+       */
 
       Tag.horizontal = function($element, $wrapper) {
         if ($wrapper == null) {
@@ -122,13 +188,22 @@ miam('system/Tag', ['system/Utils'], (function(_this) {
 
 
       /*
-      			  * Centerize element vertically. Use body by default
+      			  * Centerizes element vertically.
+      			  * Wrapper is optional: uses body by default
       			  * @param $wrapper{jQuery Object}
        */
 
       Tag.prototype.vertical = function($wrapper) {
         return Tag.vertical(this.tag, $wrapper);
       };
+
+
+      /*
+      			  * Centerizes provided element vertically.
+      			  * Wrapper is optional: uses body by default
+      			  * @param $element{jQuery Object}
+      			  * @param $wrapper{jQuery Object}
+       */
 
       Tag.vertical = function($element, $wrapper) {
         if ($wrapper == null) {
@@ -141,7 +216,8 @@ miam('system/Tag', ['system/Utils'], (function(_this) {
 
 
       /*
-      			  * Centerize element. Use body by default
+      			  * Centerizes element.
+      			  * Wrapper is optional: uses body by default
       			  * @param $wrapper{jQuery Object}
        */
 
@@ -150,6 +226,14 @@ miam('system/Tag', ['system/Utils'], (function(_this) {
         return this.vertical($wrapper);
       };
 
+
+      /*
+      			  * Centerizes provided element vertically.
+      			  * Wrapper is optional: uses body by default
+      			  * @param $element{jQuery Object}
+      			  * @param $wrapper{jQuery Object}
+       */
+
       Tag.centerize = function($element, $wrapper) {
         Tag.horizontal($element, $wrapper);
         return Tag.vertical($element, $wrapper);
@@ -157,7 +241,7 @@ miam('system/Tag', ['system/Utils'], (function(_this) {
 
 
       /*
-      			  * Cast tag to jquery object
+      			  * Casts tag to jquery object
        */
 
       Tag.prototype.toJQuery = function() {
@@ -166,7 +250,7 @@ miam('system/Tag', ['system/Utils'], (function(_this) {
 
 
       /*
-      			  * Cast tag to JS object
+      			  * Casts tag to JS object
        */
 
       Tag.prototype.toJS = function() {

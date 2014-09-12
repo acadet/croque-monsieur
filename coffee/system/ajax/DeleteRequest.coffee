@@ -4,6 +4,10 @@ miam(
 		'system/ajax/AjaxRequest'
 	]
 	() =>
+		###
+		 # @class DeleteRequest
+		 # @brief A DELETE request
+		 ###
 		class DeleteRequest extends AjaxRequest
 			constructor: (url) ->
 				super url

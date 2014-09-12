@@ -9,9 +9,10 @@ miam(
 		 # @brief This class allows developer managing cookies
 		 ###
 		class Cookie
+			#region Constructors
+
 			###
-			 # Constructor
-			 # If only key is given, get current value of cookie
+			 # If only key is given, gets current value of cookie
 			 # @param key{String} Required param corresponding to cookie's key
 			 # @param value{String} Optional Cookie's value
 			 # @param expires{Integer} Optional Number of day before expiring
@@ -31,23 +32,31 @@ miam(
 					$.cookie key, value,
 						expires: expires
 						path: path
+			
+			#endregion Constructors
+			
+			#region Private
+			
+			#endregion Private
+			
+			#region Public
 
 			###
 			 # Static method for getting value of a cookie
 			 ###
-			@getVal: (key) ->
+			@getValue: (key) ->
 				$.cookie key
 
 			###
-			 # Get value of current cookie
+			 # Gets value of current cookie
 			 ###
-			getVal: () ->
+			getValue: () ->
 				@value
 
 			###
-			 # Set value of current cookie
+			 # Sets value of current cookie
 			 ###
-			setVal: (v) ->
+			setValue: (v) ->
 				@value = v
 				$.cookie @key, @value
 
@@ -58,8 +67,10 @@ miam(
 				$.cookie key, null
 
 			###
-			 # Remove current cookie
+			 # Removes current cookie
 			 ###
 			remove: () ->
 				Cookie.remove @key
+			
+			#endregion Public
 )

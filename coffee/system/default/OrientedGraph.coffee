@@ -2,15 +2,24 @@
  # @class OrientedGraph
  # @brief An orientend graph
  # @description
- # To perform dependencies management, croque is using a graph.
- # Each vertice is a module to load and edges represents deps.
+ # To perform dependencies management, Croque is using a graph.
+ # Each vertice is a module to load and edges represent deps.
  # Croque will load firstly vertices without neighbors
  ###
 class OrientedGraph
+	#region Constructors
 
 	constructor: () ->
 		@vertices = new Array()
 		@edges = new Array()
+	
+	#endregion Constructors
+	
+	#region Private
+	
+	#endregion Private
+	
+	#region Public
 
 	###
 	 # Tests if a vertice is already in graph
@@ -62,5 +71,5 @@ class OrientedGraph
 			if v.getContent().getName() is name
 				return v
 		return null
-
-
+	
+	#endregion Public

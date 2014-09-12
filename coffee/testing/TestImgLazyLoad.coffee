@@ -1,12 +1,10 @@
 miam(
 	'tests/TestImgLazyLoad'
 	[
-		'system/TestUnit'
 		'system/ImgLazyLoad'
 	]
 	() =>
-		class TestImgLazyLoad extends TestUnit
+		class TestImgLazyLoad
 			constructor: () ->
-				super TestUnit.outputs.HTML
 				ImgLazyLoad.run 'my-lazy-img'
 )

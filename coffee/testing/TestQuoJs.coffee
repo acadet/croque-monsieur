@@ -1,11 +1,10 @@
 miam(
 	'tests/TestQuoJs'
 	[
-		'system/TestUnit'
 		'quoJS'
 	]
 	() =>
-		class TestQuoJs extends TestUnit
+		class TestQuoJs
 			constructor: () ->
 				$$(document).on 'touch', () =>
 					alert 'hello!'

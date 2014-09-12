@@ -3,6 +3,11 @@
  # @brief A log system
  ###
 class Log
+	#region Constructors
+	
+	#endregion Constructors
+	
+	#region Private
 
 	###
 	 # Level of log
@@ -12,6 +17,10 @@ class Log
 	 # 3: all details
 	 ###
 	@level = 3
+	
+	#endregion Private
+	
+	#region Public
 
 	###
 	 # Prints a debug msg
@@ -21,7 +30,7 @@ class Log
 			console.log '[CM DEBUG] ' + m
 
 	###
-	 # Prints a info msg
+	 # Prints an info msg
 	 ###
 	@i: (m) ->
 		if Log.level >= 2
@@ -34,3 +43,5 @@ class Log
 		if Log.level >= 1
 			console.log '%c[CM WARNING] ' + m, 'color : red'
 			console.trace()
+	
+	#endregion Public

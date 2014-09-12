@@ -1,1 +1,0 @@
-var _this=this;miam("system/ExceptionHandler",[],function(){var n;return n=function(){function n(){}return n.handle=function(n){return Log.w(n.message),Log.w(n.stack)},n}()});

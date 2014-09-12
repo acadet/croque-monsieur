@@ -3,6 +3,11 @@ var __hasProp = {}.hasOwnProperty,
 
 miam('system/ajax/DeleteRequest', ['system/ajax/AjaxRequest'], (function(_this) {
   return function() {
+
+    /*
+    		  * @class DeleteRequest
+    		  * @brief A DELETE request
+     */
     var DeleteRequest;
     return DeleteRequest = (function(_super) {
       __extends(DeleteRequest, _super);

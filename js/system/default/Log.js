@@ -31,7 +31,7 @@ Log = (function() {
 
 
   /*
-  	  * Prints a info msg
+  	  * Prints an info msg
    */
 
   Log.i = function(m) {

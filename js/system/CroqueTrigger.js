@@ -1,9 +1,9 @@
-miam('system/CroqueTrigger', ['system/Utils', 'system/ExceptionHandler'], (function(_this) {
+miam('system/CroqueTrigger', ['jquery', 'system/Utils'], (function(_this) {
   return function() {
 
     /*
     		  * @class CroqueTrigger
-    		  * @brief Sets trigger to specified HTML elements. See official doc for more details
+    		  * @brief Sets triggers to specified HTML elements. See official doc for more details
     		  * @description
     		  * Specify events on your HTML elements and bind js callbacks to them.
     		  * The trigger will automatically generate JS listeners.
@@ -20,24 +20,14 @@ miam('system/CroqueTrigger', ['system/Utils', 'system/ExceptionHandler'], (funct
       			  * @param element JS object
        */
 
-      CroqueTrigger.getMethod = function(trigger, element) {
-        var error, f;
+      CroqueTrigger._getMethod = function(trigger, element) {
         if (trigger.length < 2) {
           throw new Error('Specified event is not supported');
         }
-        trigger = Utils.capitalize(trigger);
-        try {
-          f = $(element).attr('data-on' + trigger);
-          return f;
-        } catch (_error) {
-          error = _error;
-          Log.w('An error has occured when trying fixing triggers');
-          ExceptionHandler.handle(error);
-        }
-        return null;
+        return $(element).attr('data-on' + Utils.capitalize(trigger));
       };
 
-      CroqueTrigger.bindTriggers = function(events) {
+      CroqueTrigger._bindTriggers = function(events) {
         var e, _i, _len, _results;
         _results = [];
         for (_i = 0, _len = events.length; _i < _len; _i++) {
@@ -45,7 +35,7 @@ miam('system/CroqueTrigger', ['system/Utils', 'system/ExceptionHandler'], (funct
           _results.push($('*[data-on' + Utils.capitalize(e)).each((function(_this) {
             return function(index, element) {
               var method;
-              method = CroqueTrigger.getMethod(e, element);
+              method = CroqueTrigger._getMethod(e, element);
               if (method == null) {
                 return;
               }
@@ -55,8 +45,8 @@ miam('system/CroqueTrigger', ['system/Utils', 'system/ExceptionHandler'], (funct
                   return eval('window.Croque.getMainClass().' + method + '(element, event)');
                 } catch (_error) {
                   error = _error;
-                  Log.w('An error has occurend when trying applying method');
-                  return ExceptionHandler.handle(error);
+                  Log.w('An error has occurend when trying to apply method');
+                  return console.error(error);
                 }
               });
             };
@@ -70,10 +60,10 @@ miam('system/CroqueTrigger', ['system/Utils', 'system/ExceptionHandler'], (funct
       			  * Sets mouse listeners
        */
 
-      CroqueTrigger.setMouseEvents = function() {
+      CroqueTrigger._setMouseEvents = function() {
         var events;
         events = ['click', 'dbClick', 'mouseEnter', 'mouseLeave', 'mouseMove', 'mouseOut', 'mouseOver', 'mouseUp', 'mouseDown'];
-        return CroqueTrigger.bindTriggers(events);
+        return CroqueTrigger._bindTriggers(events);
       };
 
 
@@ -81,59 +71,10 @@ miam('system/CroqueTrigger', ['system/Utils', 'system/ExceptionHandler'], (funct
       			  * Sets keyboard listeners
        */
 
-      CroqueTrigger.setKeyboardEvents = function() {
+      CroqueTrigger._setKeyboardEvents = function() {
         var events;
         events = ['keyPress', 'keyDown', 'keyUp'];
-        return CroqueTrigger.bindTriggers(events);
-      };
-
-
-      /*
-      			  * Sets touch listeners
-       */
-
-      CroqueTrigger.setTouchEvents = function() {
-        var e, events, f, quoJS, _i, _len, _results;
-        events = ['singleTap', 'doubleTap', 'hold', 'swipeUp', 'swipeDown', 'swipeLeft', 'swipeRight'];
-        quoJS = false;
-        f = (function(_this) {
-          return function(e, element) {
-            var method;
-            method = CroqueTrigger.getMethod(e, element);
-            if (method == null) {
-              return;
-            }
-            return $$(element).on(e, function() {
-              var error;
-              try {
-                return eval('window.Croque.getMainClass().' + method + '(element)');
-              } catch (_error) {
-                error = _error;
-                Log.w('An error has occurend when trying applying method');
-                return ExceptionHandler.handle(error);
-              }
-            });
-          };
-        })(this);
-        _results = [];
-        for (_i = 0, _len = events.length; _i < _len; _i++) {
-          e = events[_i];
-          _results.push($('*[data-on' + Utils.capitalize(e)).each((function(_this) {
-            return function(index, element) {
-              var s;
-              s = e;
-              if (quoJS) {
-                return f(s, element);
-              } else {
-                return require(['quoJS'], function() {
-                  quoJS = true;
-                  return f(s, element);
-                });
-              }
-            };
-          })(this)));
-        }
-        return _results;
+        return CroqueTrigger._bindTriggers(events);
       };
 
 
@@ -142,9 +83,8 @@ miam('system/CroqueTrigger', ['system/Utils', 'system/ExceptionHandler'], (funct
        */
 
       CroqueTrigger.run = function() {
-        CroqueTrigger.setMouseEvents();
-        CroqueTrigger.setKeyboardEvents();
-        return CroqueTrigger.setTouchEvents();
+        CroqueTrigger._setMouseEvents();
+        return CroqueTrigger._setKeyboardEvents();
       };
 
       return CroqueTrigger;

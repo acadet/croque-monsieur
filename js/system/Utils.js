@@ -11,7 +11,7 @@ miam('system/Utils', [], (function(_this) {
 
 
       /*
-      			  * Join pieces of an array using glue
+      			  * Joins pieces of an array using glue
       			  * @param glue{String}
       			  * @param pieces{Array}
       			  * @return Joined array as a string
@@ -68,18 +68,44 @@ miam('system/Utils', [], (function(_this) {
 
 
       /*
+      			  * Shuffles an array
+       */
+
+      Utils.shuffleArray = function(a) {
+        var i, index, tmp, value, _i, _len, _results;
+        _results = [];
+        for (index = _i = 0, _len = a.length; _i < _len; index = ++_i) {
+          value = a[index];
+          i = parseInt(Math.round(Math.random() * (a.length - 1)));
+          tmp = a[i];
+          a[i] = value;
+          _results.push(a[index] = tmp);
+        }
+        return _results;
+      };
+
+
+      /*
       			  * Concats 2 JSON objects
       			  * @param obj1 Destination
       			  * @param obj2 Object to append
        */
 
       Utils.concatJSON = function(obj1, obj2) {
-        var key, value;
+        var key, value, _results;
+        if (obj1 == null) {
+          throw new Error('Destination is null');
+        }
+        if (obj2 == null) {
+          Log.w('Object to append is null');
+          return;
+        }
+        _results = [];
         for (key in obj2) {
           value = obj2[key];
-          obj1[key] = value;
+          _results.push(obj1[key] = value);
         }
-        return obj1;
+        return _results;
       };
 
 
@@ -89,6 +115,10 @@ miam('system/Utils', [], (function(_this) {
        */
 
       Utils.capitalize = function(string) {
+        if (string == null) {
+          Log.w('Provided string is null');
+          return null;
+        }
         if (string.length < 1) {
           throw new Error('Unable to capitalize: string is too short');
         }

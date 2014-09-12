@@ -1,9 +1,9 @@
-miam('system/ImgLazyLoad', ['system/Tag'], (function(_this) {
+miam('system/ImgLazyLoad', ['jquery', 'system/Tag'], (function(_this) {
   return function() {
 
     /*
     		  * @defaultClass ImgLazyLoad
-    		  * @brief Provides a lazy load for imgs. Applies only for images matching given class
+    		  * @brief Provides a lazy loader for imgs. Applies only for images matching given class
     		  * @description
     		  * Class is given when lauching. Breakpoints are 500 and 1000 (3 zones)
     		  * Developer must define divs with given class and srcs of imgs. 
@@ -13,78 +13,95 @@ miam('system/ImgLazyLoad', ['system/Tag'], (function(_this) {
     return ImgLazyLoad = (function() {
       function ImgLazyLoad() {}
 
-      ImgLazyLoad.defaultClass = 'lazy-img';
+
+      /*
+      			  * Shows target only if not already displayed
+       */
+
+      ImgLazyLoad._show = function(target) {
+        if (target.css('display') === 'none') {
+          return target.css('display', 'inherit');
+        }
+      };
+
+
+      /*
+      			  * Hides target only if not already hidden
+       */
+
+      ImgLazyLoad._hide = function(target) {
+        if (target.css('display') !== 'none') {
+          return target.css('display', 'none');
+        }
+      };
+
+
+      /*
+      			  * Inits loader. Creates images for each supported size
+       */
+
+      ImgLazyLoad._init = function() {
+        $(document).find('div.' + ImgLazyLoad._targetClass).each((function(_this) {
+          return function(i, e) {
+            var large, medium, small;
+            small = new Tag('img.small-lazy-img.' + ImgLazyLoad._targetClass);
+            medium = new Tag('img.medium-lazy-img.' + ImgLazyLoad._targetClass);
+            large = new Tag('img.large-lazy-img.' + ImgLazyLoad._targetClass);
+            small.setAttr('src', $(e).attr('data-small-img'));
+            medium.setAttr('src', $(e).attr('data-medium-img'));
+            large.setAttr('src', $(e).attr('data-large-img'));
+            $(e).before(small.toString());
+            $(e).before(medium.toString());
+            $(e).before(large.toString());
+            return $(e).remove();
+          };
+        })(this));
+        return ImgLazyLoad._engine();
+      };
+
+
+      /*
+      			  * Engines which image to display
+       */
+
+      ImgLazyLoad._engine = function() {
+        return $(document).find('img.' + ImgLazyLoad._targetClass).each((function(_this) {
+          return function(i, e) {
+            var _ref;
+            if ($(e).hasClass('small-lazy-img')) {
+              if (Environment.getWidth() < 500) {
+                return ImgLazyLoad._show($(e));
+              } else {
+                return ImgLazyLoad._hide($(e));
+              }
+            } else if ($(e).hasClass('medium-lazy-img')) {
+              if ((500 <= (_ref = Environment.getWidth()) && _ref < 1000)) {
+                return ImgLazyLoad._show($(e));
+              } else {
+                return ImgLazyLoad._hide($(e));
+              }
+            } else {
+              if (Environment.getWidth() >= 1000) {
+                return ImgLazyLoad._show($(e));
+              } else {
+                return ImgLazyLoad._hide($(e));
+              }
+            }
+          };
+        })(this));
+      };
 
 
       /*
       			  * Runs img lazy loader
        */
 
-      ImgLazyLoad.run = function(customClass) {
-        if (customClass != null) {
-          ImgLazyLoad.defaultClass = customClass;
-        }
-        ImgLazyLoad.setImgsFromDiv();
+      ImgLazyLoad.run = function(customTargetClass) {
+        ImgLazyLoad._targetClass = customTargetClass != null ? customTargetClass : 'lazy-img';
+        ImgLazyLoad._init();
         return $(window).resize((function(_this) {
           return function() {
-            return ImgLazyLoad.refreshSrcs();
-          };
-        })(this));
-      };
-
-
-      /*
-      			  * Called only once. Replace divs by imgs
-       */
-
-      ImgLazyLoad.setImgsFromDiv = function() {
-        return $(document).find('div.' + this.defaultClass).each((function(_this) {
-          return function(i, e) {
-            var t;
-            t = new Tag('img.' + _this.defaultClass);
-            if (Environment.getWidth() < 500) {
-              t.setAttr('src', $(e).attr('data-img-small'));
-            } else if (Environment.getWidth() < 1000) {
-              t.setAttr('src', $(e).attr('data-img-medium'));
-            } else {
-              t.setAttr('src', $(e).attr('data-img-large'));
-            }
-            t.setAttr('alt', $(e).attr('data-img-alt'));
-            t.setAttr('data-img-small', $(e).attr('data-img-small'));
-            t.setAttr('data-img-medium', $(e).attr('data-img-medium'));
-            t.setAttr('data-img-large', $(e).attr('data-img-large'));
-            $(e).before(t.toString());
-            return $(e).remove();
-          };
-        })(this));
-      };
-
-
-      /*
-      			  * Changes atrribute only if value is different than existing
-       */
-
-      ImgLazyLoad.changeOnly = function($o, key, value) {
-        if ($o.attr(key) !== value) {
-          return $o.attr(key, value);
-        }
-      };
-
-
-      /*
-      			  * Refreshes srcs on window resizing
-       */
-
-      ImgLazyLoad.refreshSrcs = function() {
-        return $(document).find('img.' + this.defaultClass).each((function(_this) {
-          return function(i, e) {
-            if (Environment.getWidth() < 500) {
-              return ImgLazyLoad.changeOnly($(e), 'src', $(e).attr('data-img-small'));
-            } else if (Environment.getWidth() < 1000) {
-              return ImgLazyLoad.changeOnly($(e), 'src', $(e).attr('data-img-medium'));
-            } else {
-              return ImgLazyLoad.changeOnly($(e), 'src', $(e).attr('data-img-large'));
-            }
+            return ImgLazyLoad._engine();
           };
         })(this));
       };

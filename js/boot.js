@@ -1,7 +1,6 @@
 
 /*
   * @file boot.coffee
-  * @author Adrien Cadet <acadet@live.fr>
   * @brief Wraps initialization of Croque Monsieur
  */
 var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
@@ -38,7 +37,8 @@ require([JSFOLDER + 'system/default/Module', JSFOLDER + 'system/default/Vertice'
         this.graph.addVertice(this.rootVertice);
         this.fixConsole();
         this.requireConfig = {
-          baseUrl: this.folder
+          baseUrl: this.folder,
+          paths: {}
         };
         if (!CROQUECONFIG.cache) {
           this.requireConfig.urlArgs = "bust=" + (new Date()).getTime();
@@ -46,18 +46,7 @@ require([JSFOLDER + 'system/default/Module', JSFOLDER + 'system/default/Vertice'
         _ref = CROQUECONFIG.libs;
         for (key in _ref) {
           value = _ref[key];
-          if (__indexOf.call(CROQUECONFIG.IESupport, key) >= 0) {
-            if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
-              define(key, []);
-            } else {
-              define(key, [value]);
-            }
-          } else {
-            if (this.requireConfig.paths == null) {
-              this.requireConfig.paths = {};
-            }
-            this.requireConfig.paths[key] = value;
-          }
+          this.requireConfig.paths[key] = value;
         }
         _ref1 = CROQUECONFIG.exports;
         for (key in _ref1) {
@@ -79,18 +68,18 @@ require([JSFOLDER + 'system/default/Module', JSFOLDER + 'system/default/Vertice'
           return function() {
             return require([_this.classPath], function() {
               return _this.whenReady(function() {
-                var browser, e;
-                browser = function(v) {
+                var browse, e;
+                browse = function(v) {
                   var m;
                   if (v.isWhite()) {
                     v.setGrey();
-                    _this.graph.mapNeighborhood(v, browser);
+                    _this.graph.mapNeighborhood(v, browse);
                     v.setBlack();
                     m = v.getContent();
                     return window[m.getName()] = (m.getDeclaration())();
                   }
                 };
-                browser(_this.rootVertice);
+                browse(_this.rootVertice);
                 try {
                   return _this.mainClass = eval("new " + _this.className + "()");
                 } catch (_error) {
@@ -106,7 +95,7 @@ require([JSFOLDER + 'system/default/Module', JSFOLDER + 'system/default/Vertice'
 
 
       /*
-        * Avoid console errors in browsers that lack a console.
+        * Avoids console errors in browsers that lack a console.
         * Replace each function by an empty one
        */
 
@@ -195,12 +184,21 @@ require([JSFOLDER + 'system/default/Module', JSFOLDER + 'system/default/Vertice'
         _results = [];
         for (_i = 0, _len = deps.length; _i < _len; _i++) {
           d = deps[_i];
-          if ((this.requireConfig.paths[d] != null) || d === 'quoJS') {
-            _results.push(require([d]));
+          if ((this.requireConfig.paths[d] != null) && __indexOf.call(CROQUECONFIG.IESupport, d) >= 0 && /MSIE/.test(navigator.userAgent)) {
+
           } else {
-            v = this.graph.find(this.extractClass(d));
+            if (this.requireConfig.paths[d] != null) {
+              v = this.graph.find(d);
+            } else {
+              v = this.graph.find(this.extractClass(d));
+            }
             if (v == null) {
-              v = new Vertice(new Module(this.extractClass(d)));
+              if (this.requireConfig.paths[d] != null) {
+                v = new Vertice(new Module(d));
+                v.setBlack();
+              } else {
+                v = new Vertice(new Module(this.extractClass(d)));
+              }
               this.total++;
               this.graph.addVertice(v);
               require([d], (function(_this) {
@@ -222,14 +220,14 @@ require([JSFOLDER + 'system/default/Module', JSFOLDER + 'system/default/Vertice'
        */
 
       Croque.prototype.whenReady = function(f) {
-        if (this.loaded >= this.total) {
+        if (this.loaded === this.total) {
           return f();
         } else {
           return setTimeout((function(_this) {
             return function() {
               return _this.whenReady(f);
             };
-          })(this), 250);
+          })(this), 100);
         }
       };
 

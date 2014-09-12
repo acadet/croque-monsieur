@@ -9,8 +9,7 @@ miam('system/Cookie', ['jqueryCookie'], (function(_this) {
     return Cookie = (function() {
 
       /*
-      			  * Constructor
-      			  * If only key is given, get current value of cookie
+      			  * If only key is given, gets current value of cookie
       			  * @param key{String} Required param corresponding to cookie's key
       			  * @param value{String} Optional Cookie's value
       			  * @param expires{Integer} Optional Number of day before expiring
@@ -44,25 +43,25 @@ miam('system/Cookie', ['jqueryCookie'], (function(_this) {
       			  * Static method for getting value of a cookie
        */
 
-      Cookie.getVal = function(key) {
+      Cookie.getValue = function(key) {
         return $.cookie(key);
       };
 
 
       /*
-      			  * Get value of current cookie
+      			  * Gets value of current cookie
        */
 
-      Cookie.prototype.getVal = function() {
+      Cookie.prototype.getValue = function() {
         return this.value;
       };
 
 
       /*
-      			  * Set value of current cookie
+      			  * Sets value of current cookie
        */
 
-      Cookie.prototype.setVal = function(v) {
+      Cookie.prototype.setValue = function(v) {
         this.value = v;
         return $.cookie(this.key, this.value);
       };
@@ -78,7 +77,7 @@ miam('system/Cookie', ['jqueryCookie'], (function(_this) {
 
 
       /*
-      			  * Remove current cookie
+      			  * Removes current cookie
        */
 
       Cookie.prototype.remove = function() {
